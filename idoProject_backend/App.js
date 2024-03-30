@@ -1,11 +1,25 @@
-const express = require("express")
+const express = require("express");
 const app = express();
 const dotenv = require("dotenv").config();
+const mongoose = require('mongoose');
+
+
+async function connecttoDB() {
+    try {
+        console.log('Trying to connect to DB');
+        await mongoose.connect(process.env.DB_CONNECT);
+        console.log('Connected to MongoDB.');
+    } catch (error) {
+        console.log('Error connecting to DB: ' + error);
+    }
+}
+
+connecttoDB();
 
 app.get('/', (req, res) => {
-    res.send('SERVER STARTED!')
-})
+    res.send('SERVER STARTED!');
+});
 
 app.listen(process.env.PORT, () => {
-    console.log(`http://localhost:${process.env.PORT}`)
-})
+    console.log(`Server is running on http://localhost:${process.env.PORT}`);
+});
