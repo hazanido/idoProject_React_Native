@@ -2,6 +2,11 @@ const express = require("express");
 const app = express();
 const dotenv = require("dotenv").config();
 const mongoose = require('mongoose');
+const bodyParser = require("body-parser");
+const user = require("./Model/user");
+
+
+
 
 
 async function connecttoDB() {
@@ -13,8 +18,11 @@ async function connecttoDB() {
         console.log('Error connecting to DB: ' + error);
     }
 }
-
 connecttoDB();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
 
 app.get('/', (req, res) => {
     res.send('SERVER STARTED!');
