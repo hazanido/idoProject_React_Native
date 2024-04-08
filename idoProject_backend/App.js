@@ -1,11 +1,11 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const dotenv = require("dotenv").config();
+const dotenv = require('dotenv').config();
 const mongoose = require('mongoose');
-const bodyParser = require("body-parser");
-const user = require("./Model/user");
-
-
+const bodyParser = require('body-parser');
+const user = require('./Model/userModel');
+const user_route = require('./routes/user_route.js');
+const post_route = require('./routes/post_route.js');
 
 
 
@@ -19,7 +19,8 @@ async function connecttoDB() {
     }
 }
 connecttoDB();
-
+app.use('/user',user_route);
+app.use('/post',post_route);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
