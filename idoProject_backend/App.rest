@@ -12,6 +12,13 @@ POST http://localhost:3000/user
 ###
 
 POST http://localhost:3000/post
+Content-Type: application/json
+
+{
+    "message":"this post",
+    "sender": "this user"
+}
+
 ###
 
 GET http://localhost:3000/post

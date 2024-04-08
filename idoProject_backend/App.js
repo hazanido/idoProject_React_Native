@@ -7,7 +7,8 @@ const user = require('./Model/userModel');
 const user_route = require('./routes/user_route.js');
 const post_route = require('./routes/post_route.js');
 
-
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 async function connecttoDB() {
     try {
@@ -21,8 +22,7 @@ async function connecttoDB() {
 connecttoDB();
 app.use('/user',user_route);
 app.use('/post',post_route);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+
 
 
 app.get('/', (req, res) => {
