@@ -10,25 +10,32 @@ const post_route = require('./routes/post_route.js');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-async function connecttoDB() {
-    try {
-        console.log('Trying to connect to DB');
-        await mongoose.connect(process.env.DB_CONNECT);
-        console.log('Connected to MongoDB.');
-    } catch (error) {
-        console.log('Error connecting to DB: ' + error);
+const appInit = () =>{
+   const promise = new Promise((resolve) => {
+    async function connecttoDB() {
+        try {
+            console.log('Trying to connect to DB');
+            await mongoose.connect(process.env.DB_CONNECT);
+            console.log('Connected to MongoDB.');
+        } catch (error) {
+            console.log('Error connecting to DB: ' + error);
+        }
     }
-}
-connecttoDB();
-app.use('/user',user_route);
-app.use('/post',post_route);
+    connecttoDB();
+    
+    app.use('/user',user_route);
+    app.use('/post',post_route);
+    
+    app.get('/', (req, res) => {
+        res.send('SERVER STARTED!');
+    });
+
+    resolve(app);
+   });
+   return promise;
+};
 
 
 
-app.get('/', (req, res) => {
-    res.send('SERVER STARTED!');
-});
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server is running on http://localhost:${process.env.PORT}`);
-});
+module.exports = appInit;
