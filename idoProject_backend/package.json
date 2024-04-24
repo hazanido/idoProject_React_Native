@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node Server.js && start http://localhost:3000",
     "dev": "nodemon Server.js && start http://localhost:3000",
-    "test": "jest --detectOpenHandles --forceExit"
+    "test": "jest --detectOpenHandles --forceExit --coverage"
   },
   "author": "Ido Hazan",
   "license": "ISC",

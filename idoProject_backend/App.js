@@ -12,16 +12,14 @@ app.use(bodyParser.json());
 
 const appInit = () =>{
    const promise = new Promise((resolve) => {
-    async function connecttoDB() {
+    
         try {
             console.log('Trying to connect to DB');
-            await mongoose.connect(process.env.DB_CONNECT);
+            mongoose.connect(process.env.DB_CONNECT);
             console.log('Connected to MongoDB.');
         } catch (error) {
             console.log('Error connecting to DB: ' + error);
         }
-    }
-    connecttoDB();
     
     app.use('/user',user_route);
     app.use('/post',post_route);

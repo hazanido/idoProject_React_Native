@@ -15,7 +15,7 @@ POST http://localhost:3000/post
 Content-Type: application/json
 
 {
-    "message":"this post111",
+    "message":"this post11111",
     "sender": "this user"
 }
 

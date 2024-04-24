@@ -22,8 +22,14 @@ const newPost = async(req,res,next)=>{
     }
 };
 
-const allPost = (req,res,next)=>{
-    res.send('all post');
+const allPost = async (req,res,next)=>{
+    
+    try {
+        const posts = await Post.find({});
+        res.json(posts);
+    } catch (err) {
+        res.status(500).send('Error retrieving posts from database');
+    }
 
 }
 
