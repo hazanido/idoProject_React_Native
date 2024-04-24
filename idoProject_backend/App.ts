@@ -12,11 +12,11 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 const appInit = () =>{
-   const promise = new Promise((resolve) => {
+   const promise = new Promise(async (resolve) => {
     
         try {
             console.log('Trying to connect to DB');
-            mongoose.connect(process.env.DB_CONNECT);
+            await mongoose.connect(process.env.DB_CONNECT);
             console.log('Connected to MongoDB.');
         } catch (error) {
             console.log('Error connecting to DB: ' + error);
@@ -37,4 +37,4 @@ const appInit = () =>{
 
 
 
-module.exports = appInit;
+export default appInit;
