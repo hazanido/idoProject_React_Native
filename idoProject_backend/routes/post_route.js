@@ -6,7 +6,10 @@ const post = require('../controllers/post.js');
 
 
 router.post('/',post.newPost);
+
 router.get('/',post.allPost);
+
+router.delete('/',post.deletePost);
     
 
 module.exports = router;

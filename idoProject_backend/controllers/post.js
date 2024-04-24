@@ -33,4 +33,7 @@ const allPost = async (req,res,next)=>{
 
 }
 
-module.exports = {newPost,allPost};
+const deletePost = async (req,res) => {
+
+}
+module.exports = {newPost,allPost,deletePost};
