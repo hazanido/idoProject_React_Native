@@ -4,8 +4,8 @@
   "description": "Ido Project ",
   "main": "App.js",
   "scripts": {
-    "start": "node Server.js && start http://localhost:3000",
-    "dev": "nodemon Server.js && start http://localhost:3000",
+    "start": "tsc && node dist/Server.js",
+    "dev": "nodemon ./src/Server.ts",
     "test": "jest --detectOpenHandles --forceExit --coverage"
   },
   "author": "Ido Hazan",

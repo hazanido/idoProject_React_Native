@@ -1,4 +1,4 @@
-import express from 'express';
+import express, {Express} from 'express';
 const app = express();
 import dotenv from 'dotenv';
 dotenv.config();
@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 const appInit = () =>{
-   const promise = new Promise(async (resolve) => {
+   const promise = new Promise<Express>(async (resolve) => {
     
         try {
             console.log('Trying to connect to DB');
