@@ -1,4 +1,4 @@
-const appInit = require("./App");
+import appInit from "./App";
 
 
 appInit().then((app) => {
