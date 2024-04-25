@@ -1,9 +1,14 @@
-//import User from '../Model/userModel';
-import { Request, Response } from 'express';
+import User from '../Model/userModel';       
+import base from './base';
+import {IUser} from '../Model/userModel';
 
-const newUser = (req:Request,res:Response)=>{
-    res.send('new user');
 
+
+
+class UserController extends BaseController<IUser>{
+    constructor() {
+        super(User)
+    }
 }
 
-export default {newUser};
+export default new UserController();
