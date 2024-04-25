@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1713959275587" clover="3.2.0">
-  <project timestamp="1713959275587" name="All files">
-    <metrics statements="67" coveredstatements="54" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="3" elements="73" coveredelements="57" complexity="0" loc="67" ncloc="67" packages="4" files="7" classes="7"/>
-    <package name="idoProject_backend">
+<coverage generated="1714059064888" clover="3.2.0">
+  <project timestamp="1714059064889" name="All files">
+    <metrics statements="61" coveredstatements="47" conditionals="0" coveredconditionals="0" methods="10" coveredmethods="4" elements="71" coveredelements="51" complexity="0" loc="61" ncloc="61" packages="4" files="6" classes="6"/>
+    <package name="src">
       <metrics statements="24" coveredstatements="22" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="2"/>
-      <file name="App.js" path="G:\lern\ProjectReactNative\idoProject_backend\App.js">
+      <file name="App.ts" path="G:\lern\ProjectReactNative\idoProject_backend\src\App.ts">
         <metrics statements="24" coveredstatements="22" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -12,47 +12,39 @@
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
-        <line num="10" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
         <line num="11" count="1" type="stmt"/>
-        <line num="13" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
         <line num="17" count="1" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
         <line num="19" count="1" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="24" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
         <line num="25" count="1" type="stmt"/>
-        <line num="27" count="1" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="31" count="1" type="stmt"/>
-        <line num="33" count="1" type="stmt"/>
-        <line num="39" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
       </file>
     </package>
-    <package name="idoProject_backend.Model">
-      <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="postModel.js" path="G:\lern\ProjectReactNative\idoProject_backend\Model\postModel.js">
-        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+    <package name="src.Model">
+      <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="postModel.ts" path="G:\lern\ProjectReactNative\idoProject_backend\src\Model\postModel.ts">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
-        <line num="14" count="1" type="stmt"/>
         <line num="16" count="1" type="stmt"/>
       </file>
-      <file name="userModel.js" path="G:\lern\ProjectReactNative\idoProject_backend\Model\userModel.js">
-        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="24" count="1" type="stmt"/>
-        <line num="26" count="1" type="stmt"/>
-      </file>
     </package>
-    <package name="idoProject_backend.controllers">
-      <metrics statements="20" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="1"/>
-      <file name="post.js" path="G:\lern\ProjectReactNative\idoProject_backend\controllers\post.js">
-        <metrics statements="17" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+    <package name="src.controllers">
+      <metrics statements="22" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="2"/>
+      <file name="post.ts" path="G:\lern\ProjectReactNative\idoProject_backend\src\controllers\post.ts">
+        <metrics statements="19" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
@@ -70,36 +62,35 @@
         <line num="29" count="1" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="36" count="1" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
       </file>
-      <file name="user.js" path="G:\lern\ProjectReactNative\idoProject_backend\controllers\user.js">
+      <file name="user.ts" path="G:\lern\ProjectReactNative\idoProject_backend\src\controllers\user.ts">
         <metrics statements="3" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
       </file>
     </package>
-    <package name="idoProject_backend.routes">
-      <metrics statements="15" coveredstatements="15" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="post_route.js" path="G:\lern\ProjectReactNative\idoProject_backend\routes\post_route.js">
-        <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="2" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="4" count="1" type="stmt"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="8" count="1" type="stmt"/>
-        <line num="9" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
-      </file>
-      <file name="user_route.js" path="G:\lern\ProjectReactNative\idoProject_backend\routes\user_route.js">
+    <package name="src.routes">
+      <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="post_route.ts" path="G:\lern\ProjectReactNative\idoProject_backend\src\routes\post_route.ts">
         <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
-        <line num="4" count="1" type="stmt"/>
-        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+      </file>
+      <file name="user_route.ts" path="G:\lern\ProjectReactNative\idoProject_backend\src\routes\user_route.ts">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
       </file>
     </package>
   </project>

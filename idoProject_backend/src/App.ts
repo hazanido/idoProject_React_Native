@@ -5,18 +5,18 @@ dotenv.config();
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import user from './Model/userModel';
-import user_route from './routes/user_route.js';
-import post_route from './routes/post_route.js';
+import user_route from './routes/user_route';
+import post_route from './routes/post_route';
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 const appInit = () =>{
-   const promise = new Promise<Express>(async (resolve) => {
+   const promise = new Promise<Express>((resolve) => {
     
         try {
             console.log('Trying to connect to DB');
-            await mongoose.connect(process.env.DB_CONNECT);
+            mongoose.connect(process.env.DB_CONNECT);
             console.log('Connected to MongoDB.');
         } catch (error) {
             console.log('Error connecting to DB: ' + error);
