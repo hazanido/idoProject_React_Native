@@ -3,7 +3,7 @@ const router = express.Router();
 import user from '../controllers/user';
 
 
-router.post('/',user.newUser);
+router.post('/',);
 
     
 
