@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 
-const postSchema = new mongoose.Schema({
+export interface IPost {
+    message: string;
+    sender: string;
+}
+
+const postSchema = new mongoose.Schema<IPost>({
     message:{
         type: String,
         require: true
@@ -13,4 +18,4 @@ const postSchema = new mongoose.Schema({
 
 
 
-export default mongoose.model('Post', postSchema);
+export default mongoose.model<IPost>("Post", postSchema);

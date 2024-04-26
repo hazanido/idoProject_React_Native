@@ -6,19 +6,24 @@
   "scripts": {
     "start": "tsc && node dist/src/Server.js",
     "dev": "nodemon ./src/Server.ts",
-    "test": "jest --detectOpenHandles --forceExit --coverage"
+    "test": "jest --detectOpenHandles --forceExit --coverage",
+    "testUser": "jest --detectOpenHandles --forceExit ./src/tests/user.test.ts"
   },
   "author": "Ido Hazan",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.4"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^4.17.1",
     "@types/jest": "^29.5.12",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^7.7.1",
     "@typescript-eslint/parser": "^7.7.1",

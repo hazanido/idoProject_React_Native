@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
-import user from './Model/userModel';
 import user_route from './routes/user_route';
 import post_route from './routes/post_route';
 

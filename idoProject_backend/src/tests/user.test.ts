@@ -2,26 +2,41 @@ import request from "supertest";
 import appInit from "../App";
 import mongoose from "mongoose";
 import { Express } from "express";
+import User from "../Model/userModel";
+
+
+const user = {
+    email: "test@gmail.com",
+    password: "123456",
+    name: "ido",
+    age: "24",
+    
+}
 
 let app: Express;
-beforeAll( async () =>{
+
+beforeAll(async () => {
     app = await appInit();
-    console.log("beforAll");
-    
+    console.log("beforeAll");
+    await User.deleteMany({ email: user.email });
 });
 
-afterAll(async () =>{
+afterAll(async () => {
     console.log("afterAll");
     await mongoose.connection.close();
 });
-
-
-describe("user tests", () => {
-    test("Test get all user",async () => {
-        console.log("Test Post get all");
-        const res = await request(app).get("/user");
+describe("User test", () => {
+    test("Post /register", async () => {
+        const res = await request(app).post("/user/register").send(user);
         expect(res.statusCode).toBe(200);
-        const data = res.body;
-        console.log(data);
     });
+    test("Post /login", async () => {
+        const res = await request(app).post("/user/login").send(user);
+        expect(res.statusCode).toBe(200);
+        console.log(res.body);
+    });
+    // test("Post /logout", async () => {
+    //     const res = await request(app).post("/user/login").send(user);
+    //     expect(res.statusCode).toBe(200);
+    // });
 });

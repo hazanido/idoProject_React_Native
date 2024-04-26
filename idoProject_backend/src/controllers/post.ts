@@ -1,28 +1,14 @@
-import Post from '../Model/postModel';
-import { Request, Response } from 'express';
+import BaseController from "./base";
+import Post, { IPost } from "../Model/postModel";
+import { Request, Response } from "express";
 
 
-
-const newPost = async(req:Request,res:Response)=>{
-    const message = req.body.message
-    const sender = req.body.sender
-
-    try {
-        const post = new Post({
-            message: message,
-            sender: sender
-        });
-        const newPost = await post.save();
-        console.log('add post to database');
-        res.status(200).send(newPost)
-        
-    } catch (err) {
-        console.error('failed to add data to database:', err);
-        res.status(500).send('Failed to add data to database');
+class PostController extends BaseController<IPost> {
+    constructor() {
+        super(Post);
     }
-};
 
-const allPost = async (req:Request,res:Response)=>{
+async allPost (req:Request,res:Response){
     
     try {
         const posts = await Post.find({});
@@ -33,8 +19,9 @@ const allPost = async (req:Request,res:Response)=>{
 
 }
 
-const deletePost = async (req:Request, res: Response) => {
+async deletePost (req:Request, res: Response){
     res.status(400);
 
 }
-export default {newPost,allPost,deletePost};
+}
+export default new PostController();

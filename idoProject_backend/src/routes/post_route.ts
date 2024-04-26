@@ -1,13 +1,13 @@
 import express from 'express';
 const router = express.Router();
-import post from '../controllers/post';
+import postController from '../controllers/post';
 
 
-router.post('/',post.newPost);
+router.post('/',postController.post.bind(postController));
 
-router.get('/',post.allPost);
+router.get('/',postController.allPost.bind(postController));
 
-router.delete('/',post.deletePost);
+router.delete('/:id',postController.remove.bind(postController));
     
 
 export default router;
