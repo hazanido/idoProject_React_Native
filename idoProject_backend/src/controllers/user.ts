@@ -11,7 +11,7 @@ class UserController extends BaseController<IUser>{
     }
     async getUser (req: Request, res: Response){
         try {
-            
+            console.log("testtttttt");
             if (req.query.name) {
                 const user = await User.findOne({ name: req.query.name } as Partial<IUser>);
                 if (user) {
@@ -78,10 +78,21 @@ class UserController extends BaseController<IUser>{
             },process.env.TOKEN_SECRET,{
                 expiresIn: process.env.TOKEN_EXPIRATION
             });
-            
 
+            const refreshtoken = jwt.sign({
+                _id: user._id
+            },process.env.REFRESH_TOKEN_SECRET);
+
+            if(user.tokens == null){
+               user.tokens = [refreshtoken];
+            }else{
+                user.tokens.push(refreshtoken);
+            }await user.save();
+                
             return res.status(200).send({
-                accessToken: token
+                accessToken: token,
+                refreshtoken: refreshtoken
+
             });
 
         }catch(error){
@@ -89,9 +100,79 @@ class UserController extends BaseController<IUser>{
             return res.status(400).send(error.message);
     
         }
+    }
+
+   
+    async refresh (req: Request, res: Response){
+        console.log("refresh");
+        const userHeader = req.headers['authorization'];
+        const refreshToken = userHeader && userHeader.split(' ')[1];
+
+        if (refreshToken == null) {
+            return res.status(401).send("missing token");
+        }
+
+        try {
+            const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+            req.body.user = decoded;
+
+            const user = await User.findById(req.body.user._id);
+            console.log(user);
+            if(user == null || user.tokens == null|| !user.tokens.includes(refreshToken)){
+                if(user.tokens != null){
+                    user.tokens = [];
+                    await user.save();
+                }
+                return res.status(403).send("invalid token");
+            }
+            const token = jwt.sign({
+                _id: user._id
+            },process.env.TOKEN_SECRET,{
+                expiresIn: process.env.TOKEN_EXPIRATION
+            });
+
+            const newRefreshtoken = jwt.sign({
+                _id: user._id
+            },process.env.REFRESH_TOKEN_SECRET,{
+            });
 
 
-}
+            user.tokens = user.tokens.filter(token => token != refreshToken)
+            user.tokens.push(newRefreshtoken);
+            await user.save();   
+
+            return res.status(200).send({
+                accessToken: token,
+                refreshtoken: newRefreshtoken
+
+            });
+            
+        } catch (err) {
+            return res.status(403).send("invalid token");
+        }
+
+    }
+
+
+    // async refresh1 (req: Request, res: Response){
+    //     const userHeader = req.headers['authorization'];
+    //     const refreshToken = userHeader && userHeader.split('')[1];
+
+    //     if (refreshToken == null) {
+    //         return res.status(401).send("missing token");
+    //     }
+    //     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET,async (err, userInfo: {_id: string}) => {
+    //         if (err) {
+    //             return res.status(403).send("invalid token");
+    //         }
+    //         const user = await User.findById(userInfo._id);
+
+
+
+            
+    //     });
+
+    // }
 }
 
 export default new UserController();

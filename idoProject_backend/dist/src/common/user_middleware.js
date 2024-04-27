@@ -12,28 +12,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const base_1 = __importDefault(require("./base"));
-const postModel_1 = __importDefault(require("../Model/postModel"));
-class PostController extends base_1.default {
-    constructor() {
-        super(postModel_1.default);
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("auth middleware");
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (token == null) {
+        return res.status(401).send("missing token");
     }
-    allPost(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const posts = yield postModel_1.default.find({});
-                res.json(posts);
-            }
-            catch (err) {
-                res.status(500).send('Error retrieving posts from database');
-            }
-        });
-    }
-    deletePost(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            res.status(400);
-        });
-    }
-}
-exports.default = new PostController();
-//# sourceMappingURL=post.js.map
+    jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+        if (err) {
+            return res.status(403).send("invalid token");
+        }
+        req.body.user = user;
+        next();
+    });
+});
+exports.default = authMiddleware;
+//# sourceMappingURL=user_middleware.js.map

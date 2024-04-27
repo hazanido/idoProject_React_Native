@@ -36,18 +36,44 @@ describe("User test", () => {
         console.log(res.body);
 
         const accessToken = res.body.accessToken;
+        const refreshToken = res.body.refreshToken;
         expect(accessToken).not.toBeNull();
+        expect(refreshToken).not.toBeNull();
 
-        const invalidToken = "invalidTokenValue";
-        const res2 = await request(app).get("/user").set('Authorization', 'Bearer ' + invalidToken);
+        
+        const res2 = await request(app).get("/user").set('Authorization', 'Bearer ' + accessToken);
         expect(res2.statusCode).toBe(403);
 
         const fakeToken = accessToken + "0";
         const res3 = await request(app).get("/user").set('Authorization', 'Bearer ' + fakeToken);
         expect(res3.statusCode).not.toBe(200);
     });
+
     // test("Post /logout", async () => {
     //     const res = await request(app).post("/user/login").send(user);
     //     expect(res.statusCode).toBe(200);
     // });
+
+     test("Get /refresh", async () => {
+        const res = await request(app).post("/user/login").send(user);
+        expect(res.statusCode).toBe(200);
+        console.log(res.body);
+
+        //const accessToken = res.body.accessToken;
+        const refreshToken = res.body.refreshToken;
+        console.log("befor refresh");
+        const res2 = await request(app).get("/user/refresh").set('Authorization', 'Bearer ' + refreshToken).send();
+        console.log("after refresh");
+        expect(res2.statusCode).toBe(200);
+
+        const accessToken2 = res2.body.accessToken;
+        const refreshToken2 = res2.body.refreshToken;
+        expect(accessToken2).not.toBeNull();
+        expect(refreshToken2).not.toBeNull();
+
+        const res3 = await request(app).get("/user").set('Authorization', 'Bearer ' + accessToken2);
+        expect(res3.statusCode).not.toBe(200);
+
+    });
+    
 });

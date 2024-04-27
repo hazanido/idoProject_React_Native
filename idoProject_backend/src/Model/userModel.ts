@@ -5,7 +5,7 @@ export interface IUser {
     Password: string;
     email: string;
     age: number;
-    
+    tokens: string[];
     
     
 }
@@ -29,6 +29,9 @@ const UserSchema = new mongoose.Schema<IUser>({
         type: Number,
         required: true,
         },
+    tokens: {
+        type: [String]
+    }    
     
   
 });
