@@ -9,7 +9,25 @@ class UserController extends BaseController<IUser>{
     constructor() {
         super(User)
     }
-
+    async getUser (req: Request, res: Response){
+        try {
+            
+            if (req.query.name) {
+                const user = await User.findOne({ name: req.query.name } as Partial<IUser>);
+                if (user) {
+                    return res.status(200).json(user);
+                } else {
+                    return res.status(404).json({ message: 'User not found' });
+                }
+            } else {
+                const users = await User.find();
+                return res.status(200).json(users);
+            }
+        } catch (error) {
+            console.error('Error getting users:', error);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    }
     async register (req: Request,res: Response){
         console.log("register");
         const email = req.body.email;
@@ -55,7 +73,7 @@ class UserController extends BaseController<IUser>{
             if(!validePassword){
                 return res.status(400).send("invalid password");
             }
-            const token = await jwt.sign({
+            const token = jwt.sign({
                 _id: user._id
             },process.env.TOKEN_SECRET,{
                 expiresIn: process.env.TOKEN_EXPIRATION

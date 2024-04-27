@@ -34,6 +34,17 @@ describe("User test", () => {
         const res = await request(app).post("/user/login").send(user);
         expect(res.statusCode).toBe(200);
         console.log(res.body);
+
+        const accessToken = res.body.accessToken;
+        expect(accessToken).not.toBeNull();
+
+        const invalidToken = "invalidTokenValue";
+        const res2 = await request(app).get("/user").set('Authorization', 'Bearer ' + invalidToken);
+        expect(res2.statusCode).toBe(403);
+
+        const fakeToken = accessToken + "0";
+        const res3 = await request(app).get("/user").set('Authorization', 'Bearer ' + fakeToken);
+        expect(res3.statusCode).not.toBe(200);
     });
     // test("Post /logout", async () => {
     //     const res = await request(app).post("/user/login").send(user);
