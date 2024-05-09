@@ -13,13 +13,18 @@ class UserController extends BaseController<IUser>{
         try {
             console.log("testtttttt");
             if (req.query.name) {
+                
                 const user = await User.findOne({ name: req.query.name } as Partial<IUser>);
                 if (user) {
+                    
+                    console.log(user);
                     return res.status(200).json(user);
                 } else {
                     return res.status(404).json({ message: 'User not found' });
                 }
             } else {
+                console.log("if 14444");
+
                 const users = await User.find();
                 return res.status(200).json(users);
             }
@@ -45,7 +50,7 @@ class UserController extends BaseController<IUser>{
 
             const newUser = await User.create({
                 name: req.body.name,
-                Password: hashedPassword,
+                password: hashedPassword,
                 email: req.body.email,
                 age: req.body.age,
             
@@ -61,6 +66,8 @@ class UserController extends BaseController<IUser>{
         console.log("login");
         const email = req.body.email;
         const password = req.body.password;
+
+        console.log(req.body.email);
         if (email == null || password == null) {
             return res.status(400).send("missing email or password")
          }
@@ -69,16 +76,16 @@ class UserController extends BaseController<IUser>{
             if (user == null) {
                 return  res.status(400).send("invalid emil or password");
             }
-            const validePassword = await bcrypt.compare(password,user.Password);
+            const validePassword = await bcrypt.compare(password,user.password);
             if(!validePassword){
                 return res.status(400).send("invalid password");
             }
-            const token = jwt.sign({
+            const token =  jwt.sign({
                 _id: user._id
-            },process.env.TOKEN_SECRET,{
+            }, process.env.TOKEN_SECRET, {
                 expiresIn: process.env.TOKEN_EXPIRATION
             });
-
+            console.log("REFRESH_TOKEN_SECRET");
             const refreshtoken = jwt.sign({
                 _id: user._id
             },process.env.REFRESH_TOKEN_SECRET);
@@ -91,7 +98,7 @@ class UserController extends BaseController<IUser>{
                 
             return res.status(200).send({
                 accessToken: token,
-                refreshtoken: refreshtoken
+                refreshToken: refreshtoken
 
             });
 
@@ -112,44 +119,45 @@ class UserController extends BaseController<IUser>{
             return res.status(401).send("missing token");
         }
 
-        try {
-            const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-            req.body.user = decoded;
-
-            const user = await User.findById(req.body.user._id);
-            console.log(user);
-            if(user == null || user.tokens == null|| !user.tokens.includes(refreshToken)){
-                if(user.tokens != null){
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, userId:{_id: string} ) => {
+            if (err) {
+                return res.status(403).send("invalid token11111");
+            }   
+            try{
+            const user = await User.findById(userId._id);
+            
+            if ( user == null || user.tokens == null || !user.tokens.includes(refreshToken)){
+                if (user.tokens != null){
                     user.tokens = [];
                     await user.save();
                 }
-                return res.status(403).send("invalid token");
+                return res.status(403).send("invalid token22222");
             }
-            const token = jwt.sign({
+            const token =  jwt.sign({
                 _id: user._id
-            },process.env.TOKEN_SECRET,{
+            }, process.env.TOKEN_SECRET, {
                 expiresIn: process.env.TOKEN_EXPIRATION
             });
-
+            console.log("REFRESH_TOKEN_SECRET");
             const newRefreshtoken = jwt.sign({
                 _id: user._id
-            },process.env.REFRESH_TOKEN_SECRET,{
-            });
+            },process.env.REFRESH_TOKEN_SECRET);
 
-
-            user.tokens = user.tokens.filter(token => token != refreshToken)
+            user.tokens = user.tokens.filter(token => token != refreshToken);
             user.tokens.push(newRefreshtoken);
-            await user.save();   
-
+            await user.save();
+                
             return res.status(200).send({
                 accessToken: token,
-                refreshtoken: newRefreshtoken
+                refreshToken: newRefreshtoken
 
             });
-            
-        } catch (err) {
-            return res.status(403).send("invalid token");
+        }catch(error){
+            console.log(error);
+            return res.status(400).send(error.message);
+
         }
+        });
 
     }
 

@@ -11,6 +11,7 @@ class BaseController<ModelType> {
         console.log(req.params);
         try {
             const item = await this.itemModel.findById(req.params.id);
+            console.log(item)
             if (!item) {
                 return res.status(404).send("not found");
             } else {

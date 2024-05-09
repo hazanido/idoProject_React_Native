@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export interface IUser {
     name: string;
-    Password: string;
+    password: string;
     email: string;
     age: number;
     tokens: string[];
@@ -16,7 +16,7 @@ const UserSchema = new mongoose.Schema<IUser>({
         type: String,
         required: true,
       },
-    Password:{
+    password:{
         type: String,
         required: true
     },
