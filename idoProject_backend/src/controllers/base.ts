@@ -8,9 +8,8 @@ class BaseController<ModelType> {
     }
 
     async getById(req: Request, res: Response) {
-        console.log(req.params);
         try {
-            const item = await this.itemModel.findById(req.params.id);
+            const item = await this.itemModel.findOne({id: req.body.id});
             console.log(item)
             if (!item) {
                 return res.status(404).send("not found");
@@ -35,12 +34,12 @@ class BaseController<ModelType> {
     }
 
     put(req: Request, res: Response) {
-        console.log("student put");
+        console.log(" put");
         res.status(400).send("Not implemented");
     }
 
     async remove(req: Request, res: Response) {
-        console.log("student delete");
+        console.log(" delete");
         try {
             await this.itemModel.findByIdAndDelete(req.params.id);
             return res.status(200).send();

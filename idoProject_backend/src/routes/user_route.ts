@@ -7,7 +7,7 @@ router.get("/", userMiddleware,UserController.getUser.bind(UserController));
 
 router.delete('/:id',userMiddleware,UserController.remove.bind(UserController));
 
-router.get("/:id",UserController.getById.bind(UserController));
+router.get("/",userMiddleware,UserController.getById.bind(UserController));
 
 router.post("/", userMiddleware,UserController.post.bind(UserController));
 

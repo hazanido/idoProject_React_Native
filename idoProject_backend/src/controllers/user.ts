@@ -125,7 +125,7 @@ class UserController extends BaseController<IUser>{
             }   
             try{
             const user = await User.findById(userId._id);
-            
+            console.log("userrrrrrrr:",user);
             if ( user == null || user.tokens == null || !user.tokens.includes(refreshToken)){
                 if (user.tokens != null){
                     user.tokens = [];

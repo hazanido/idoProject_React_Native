@@ -68,9 +68,10 @@ describe("User test", () => {
         expect(refreshToken2).not.toBeNull();
 
         const res3 = await request(app).get("/user").set('Authorization', 'Bearer ' + accessToken2);
-        expect(res3.statusCode).not.toBe(200);
+        expect(res3.statusCode).toBe(200);
 
     });
+    
 
     // test("Post /logout", async () => {
     //     const res = await request(app).post("/user/login").send(user);
