@@ -11,7 +11,6 @@ class UserController extends BaseController<IUser>{
     }
     async getUser (req: Request, res: Response){
         try {
-            console.log("testtttttt");
             if (req.query.name) {
                 
                 const user = await User.findOne({ name: req.query.name } as Partial<IUser>);
@@ -23,8 +22,6 @@ class UserController extends BaseController<IUser>{
                     return res.status(404).json({ message: 'User not found' });
                 }
             } else {
-                console.log("if 14444");
-
                 const users = await User.find();
                 return res.status(200).json(users);
             }
@@ -87,7 +84,8 @@ class UserController extends BaseController<IUser>{
             });
             console.log("REFRESH_TOKEN_SECRET");
             const refreshtoken = jwt.sign({
-                _id: user._id
+                _id: user._id,
+                salt: Math.random()
             },process.env.REFRESH_TOKEN_SECRET);
 
             if(user.tokens == null){
@@ -140,7 +138,8 @@ class UserController extends BaseController<IUser>{
             });
             console.log("REFRESH_TOKEN_SECRET");
             const newRefreshtoken = jwt.sign({
-                _id: user._id
+                _id: user._id,
+                salt: Math.random()
             },process.env.REFRESH_TOKEN_SECRET);
 
             user.tokens = user.tokens.filter(token => token != refreshToken);
