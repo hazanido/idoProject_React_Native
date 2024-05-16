@@ -7,7 +7,7 @@
     "start": "tsc && node dist/src/Server.js",
     "dev": "nodemon ./src/Server.ts",
     "test": "jest --detectOpenHandles --forceExit --coverage",
-    "testUser": "jest --detectOpenHandles --forceExit ./src/tests/user.test.ts"
+    "testUser": "jest --detectOpenHandles --forceExit --coverage ./src/tests/user.test.ts"
   },
   "author": "Ido Hazan",
   "license": "ISC",

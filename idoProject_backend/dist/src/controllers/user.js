@@ -23,10 +23,10 @@ class UserController extends base_1.default {
     getUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("testtttttt");
                 if (req.query.name) {
                     const user = yield userModel_1.default.findOne({ name: req.query.name });
                     if (user) {
+                        console.log(user);
                         return res.status(200).json(user);
                     }
                     else {
@@ -59,12 +59,13 @@ class UserController extends base_1.default {
                 }
                 const salt = yield bcrypt_1.default.genSalt(10);
                 const hashedPassword = yield bcrypt_1.default.hash(password, salt);
-                const newUser = yield userModel_1.default.create({
+                const newUser = new userModel_1.default({
                     name: req.body.name,
-                    Password: hashedPassword,
+                    password: hashedPassword,
                     email: req.body.email,
                     age: req.body.age,
                 });
+                yield newUser.save();
                 return res.status(200).send(newUser);
             }
             catch (error) {
@@ -78,6 +79,7 @@ class UserController extends base_1.default {
             console.log("login");
             const email = req.body.email;
             const password = req.body.password;
+            console.log(req.body.email);
             if (email == null || password == null) {
                 return res.status(400).send("missing email or password");
             }
@@ -86,7 +88,7 @@ class UserController extends base_1.default {
                 if (user == null) {
                     return res.status(400).send("invalid emil or password");
                 }
-                const validePassword = yield bcrypt_1.default.compare(password, user.Password);
+                const validePassword = yield bcrypt_1.default.compare(password, user.password);
                 if (!validePassword) {
                     return res.status(400).send("invalid password");
                 }
@@ -95,8 +97,10 @@ class UserController extends base_1.default {
                 }, process.env.TOKEN_SECRET, {
                     expiresIn: process.env.TOKEN_EXPIRATION
                 });
+                console.log("REFRESH_TOKEN_SECRET");
                 const refreshtoken = jsonwebtoken_1.default.sign({
-                    _id: user._id
+                    _id: user._id,
+                    salt: Math.random()
                 }, process.env.REFRESH_TOKEN_SECRET);
                 if (user.tokens == null) {
                     user.tokens = [refreshtoken];
@@ -107,7 +111,7 @@ class UserController extends base_1.default {
                 yield user.save();
                 return res.status(200).send({
                     accessToken: token,
-                    refreshtoken: refreshtoken
+                    refreshToken: refreshtoken
                 });
             }
             catch (error) {
@@ -124,37 +128,43 @@ class UserController extends base_1.default {
             if (refreshToken == null) {
                 return res.status(401).send("missing token");
             }
-            try {
-                const decoded = jsonwebtoken_1.default.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-                req.body.user = decoded;
-                const user = yield userModel_1.default.findById(req.body.user._id);
-                console.log(user);
-                if (user == null || user.tokens == null || !user.tokens.includes(refreshToken)) {
-                    if (user.tokens != null) {
-                        user.tokens = [];
-                        yield user.save();
-                    }
-                    return res.status(403).send("invalid token");
+            jsonwebtoken_1.default.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, userId) => __awaiter(this, void 0, void 0, function* () {
+                if (err) {
+                    return res.status(403).send("invalid token11111");
                 }
-                const token = jsonwebtoken_1.default.sign({
-                    _id: user._id
-                }, process.env.TOKEN_SECRET, {
-                    expiresIn: process.env.TOKEN_EXPIRATION
-                });
-                const newRefreshtoken = jsonwebtoken_1.default.sign({
-                    _id: user._id
-                }, process.env.REFRESH_TOKEN_SECRET, {});
-                user.tokens = user.tokens.filter(token => token != refreshToken);
-                user.tokens.push(newRefreshtoken);
-                yield user.save();
-                return res.status(200).send({
-                    accessToken: token,
-                    refreshtoken: newRefreshtoken
-                });
-            }
-            catch (err) {
-                return res.status(403).send("invalid token");
-            }
+                try {
+                    const user = yield userModel_1.default.findById(userId._id);
+                    console.log("userrrrrrrr:", user);
+                    if (user == null || user.tokens == null || !user.tokens.includes(refreshToken)) {
+                        if (user.tokens != null) {
+                            user.tokens = [];
+                            yield user.save();
+                        }
+                        return res.status(403).send("invalid token22222");
+                    }
+                    const token = jsonwebtoken_1.default.sign({
+                        _id: user._id
+                    }, process.env.TOKEN_SECRET, {
+                        expiresIn: process.env.TOKEN_EXPIRATION
+                    });
+                    console.log("REFRESH_TOKEN_SECRET");
+                    const newRefreshtoken = jsonwebtoken_1.default.sign({
+                        _id: user._id,
+                        salt: Math.random()
+                    }, process.env.REFRESH_TOKEN_SECRET);
+                    user.tokens = user.tokens.filter(token => token != refreshToken);
+                    user.tokens.push(newRefreshtoken);
+                    yield user.save();
+                    return res.status(200).send({
+                        accessToken: token,
+                        refreshToken: newRefreshtoken
+                    });
+                }
+                catch (error) {
+                    console.log(error);
+                    return res.status(400).send(error.message);
+                }
+            }));
         });
     }
 }

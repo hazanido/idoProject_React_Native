@@ -15,9 +15,9 @@ class BaseController {
     }
     getById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(req.params);
             try {
-                const item = yield this.itemModel.findById(req.params.id);
+                const item = yield this.itemModel.findOne({ id: req.body.id });
+                console.log(item);
                 if (!item) {
                     return res.status(404).send("not found");
                 }
@@ -45,12 +45,12 @@ class BaseController {
         });
     }
     put(req, res) {
-        console.log("student put");
+        console.log(" put");
         res.status(400).send("Not implemented");
     }
     remove(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("student delete");
+            console.log(" delete");
             try {
                 yield this.itemModel.findByIdAndDelete(req.params.id);
                 return res.status(200).send();

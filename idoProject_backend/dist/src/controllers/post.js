@@ -18,6 +18,15 @@ class PostController extends base_1.default {
     constructor() {
         super(postModel_1.default);
     }
+    post(req, res) {
+        const _super = Object.create(null, {
+            post: { get: () => super.post }
+        });
+        return __awaiter(this, void 0, void 0, function* () {
+            req.body.owner = req.body.user._id;
+            _super.post.call(this, req, res);
+        });
+    }
     allPost(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

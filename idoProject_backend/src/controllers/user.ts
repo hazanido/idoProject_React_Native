@@ -45,13 +45,14 @@ class UserController extends BaseController<IUser>{
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password,salt);
 
-            const newUser = await User.create({
+            const newUser = new User({
                 name: req.body.name,
                 password: hashedPassword,
                 email: req.body.email,
                 age: req.body.age,
             
             });
+            await newUser.save();
             return res.status(200).send(newUser);
         } catch (error) {
             console.log(error);

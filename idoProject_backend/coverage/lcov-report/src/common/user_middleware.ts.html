@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for idoProject_backend/controllers/post.js</title>
+    <title>Code coverage report for src/common/user_middleware.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">idoProject_backend/controllers</a> post.js</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/common</a> user_middleware.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">41.17% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/17</span>
+                <span class='fraction'>3/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/2</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">41.17% </span>
+                <span class="strong">21.42% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/17</span>
+                <span class='fraction'>3/14</span>
             </div>
         
             
@@ -87,23 +87,12 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -111,71 +100,49 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">const Post = require ('../Model/postModel')
+<span class="cline-any cline-yes">2x</span></td><td class="text"><pre class="prettyprint lang-js">import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
 &nbsp;
+const authMiddleware = <span class="fstat-no" title="function not covered" >async (r</span>eq: Request, res: Response, next: NextFunction) =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > {</span></span>
+<span class="cstat-no" title="statement not covered" >    console.log("auth middleware");</span>
 &nbsp;
+    const authHeader = <span class="cstat-no" title="statement not covered" >req.headers['authorization'];</span>
+    const token = <span class="cstat-no" title="statement not covered" >authHeader &amp;&amp; authHeader.split(' ')[1];</span>
 &nbsp;
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (token == null) {</span>
+<span class="cstat-no" title="statement not covered" >        return res.status(401).send("missing token");</span>
+    }
 &nbsp;
-const newPost = <span class="fstat-no" title="function not covered" >as</span>ync(req,res,next)=&gt;{
-    const message = <span class="cstat-no" title="statement not covered" >req.body.message</span>
-    const sender = <span class="cstat-no" title="statement not covered" >req.body.sender</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    try {</span>
-        const post = <span class="cstat-no" title="statement not covered" >new Post({</span>
-            message: message,
-            sender: sender
-        });
-        const newPost = <span class="cstat-no" title="statement not covered" >await post.save();</span>
-<span class="cstat-no" title="statement not covered" >        console.log('add post to database');</span>
-<span class="cstat-no" title="statement not covered" >        res.status(200).send(newPost)</span>
+<span class="cstat-no" title="statement not covered" >    jwt.verify(token, process.env.TOKEN_SECRET, <span class="fstat-no" title="function not covered" >(e</span>rr, user) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (err) {</span>
+<span class="cstat-no" title="statement not covered" >            console.log(user);</span>
+<span class="cstat-no" title="statement not covered" >            return res.status(403).send("invalid token4444444");</span>
+        }
+<span class="cstat-no" title="statement not covered" >        req.body.user = user;</span>
         
-    } catch (err) {
-<span class="cstat-no" title="statement not covered" >        console.error('failed to add data to database:', err);</span>
-<span class="cstat-no" title="statement not covered" >        res.status(500).send('Failed to add data to database');</span>
-    }
-};
-&nbsp;
-const allPost = async (req,res,next)=&gt;{
-    
-    try {
-        const posts = await Post.find({});
-        res.json(posts);
-    } catch (err) {
-<span class="cstat-no" title="statement not covered" >        res.status(500).send('Error retrieving posts from database');</span>
-    }
-&nbsp;
+<span class="cstat-no" title="statement not covered" >        next();</span>
+    });
 }
 &nbsp;
-module.exports = {newPost,allPost};</pre></td></tr></table></pre>
+export default authMiddleware;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-24T11:47:55.401Z
+                at 2024-05-16T07:42:09.682Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
