@@ -49,7 +49,26 @@ import userMiddleware from '../common/user_middleware';
  *        password: '123456'
  *        age: 25
  */
-
+/**
+* @swagger
+* components:
+*   schemas:
+*     Tokens:
+*       type: object
+*       required:
+*           - accessToken
+*           - refreshToken
+*       properties:
+*           accessToken:
+*               type: string
+*               description: The JWT access token
+*           refreshToken:
+*               type: string
+*               description: The JWT refresh token
+*       example:
+*           accessToken: '123cd123x1xx1'
+*           refreshToken: '134r2134cr1x3c'
+*/
 router.get("/", userMiddleware,UserController.getUser.bind(UserController));
 
 router.delete('/:id',userMiddleware,UserController.remove.bind(UserController));
@@ -82,10 +101,37 @@ router.delete("/:id", userMiddleware,UserController.remove.bind(UserController))
  *           $ref: '#/components/schemas/User'
  */
 router.post('/register',UserController.register.bind(UserController));
-
+/**
+* @swagger
+* /user/login:
+*   post:
+*       summary: login a user
+*       tags: [User]
+*       requestBody:
+*           required: true
+*           content:
+*               application/json:
+*                   schema:
+*                     type: object 
+*                     properties:
+*                      email:
+*                           type: string
+*                      password:
+*                           type: string
+*                     example:   
+*                           email: 'ido@gmail.com'
+*                           password: '123456'
+*       responses:
+*           200:
+*               description: The acess & refresh tokens
+*               content:
+*                   application/json:
+*                       schema:
+*                           $ref: '#/components/schemas/Tokens'
+*/
 router.post('/login',UserController.login.bind(UserController)); 
 
-router.post('/logout',UserController.login.bind(UserController)); 
+router.get('/logout',UserController.login.bind(UserController)); 
 
 router.get('/refresh', UserController.refresh.bind(UserController));
 
