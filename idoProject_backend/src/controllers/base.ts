@@ -34,8 +34,8 @@ class BaseController<ModelType> {
     }
 
     put(req: Request, res: Response) {
-        console.log(" put");
-        res.status(400).send("Not implemented");
+        console.log("item put");
+        res.status(400).send("not implemented");
     }
 
     async remove(req: Request, res: Response) {

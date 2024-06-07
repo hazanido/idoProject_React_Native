@@ -160,30 +160,37 @@ class UserController extends BaseController<IUser>{
         });
 
     }
-    async logout (req: Request, res: Response){
+    async logout(req: Request, res: Response) {
         console.log("logout");
+    
         const userHeader = req.headers['authorization'];
         const refreshToken = userHeader && userHeader.split(' ')[1];
+    
         if (refreshToken == null) {
             return res.status(401).send("missing token");
         }
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, userId:{_id: string} ) => {
+    
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, userId: { _id: string }) => {
             if (err) {
                 console.log(err);
-                return res.status(403).send("Invalid token1");
-            } 
-            try{
+                return res.status(403).send("Invalid token");
+            }
+    
+            try {
                 const user = await User.findById(userId._id);
                 if (!user) {
                     return res.status(404).send("User not found");
                 }
-                if (!user.tokens || !user.tokens.includes(refreshToken)){
-                    return res.status(403).send("invalid token2");
+    
+                if (!user.tokens || !user.tokens.includes(refreshToken)) {
+                    return res.status(403).send("invalid token");
                 }
+    
                 user.tokens = user.tokens.filter(token => token != refreshToken);
                 await user.save();
+    
                 return res.status(200).send("logout successfully");
-            }catch(error){
+            } catch (error) {
                 console.log(error);
                 return res.status(500).send("Internal server error");
             }

@@ -104,9 +104,51 @@ describe("User test", () => {
         
     });
 
-    // test("Post /logout", async () => {
-    //     const res = await request(app).post("/user/login").send(user);
-    //     expect(res.statusCode).toBe(200);
-    // });
+    test("Post /logout", async () => {
+        const res = await request(app).post("/user/login").send(user);
+        expect(res.statusCode).toBe(200);
+        console.log(res.body);
+    
+        const accessToken = res.body.accessToken;
+        const refreshToken = res.body.refreshToken;
+        expect(accessToken).not.toBeNull();
+        expect(refreshToken).not.toBeNull();
+    
+        const res2 = await request(app).post("/user/logout").set('Authorization', 'Bearer ' + refreshToken);
+        expect(res2.statusCode).toBe(200);
+    
+        const res3 = await request(app).get("/user").set('Authorization', 'Bearer ' + refreshToken);
+        expect(res3.statusCode).not.toBe(200);
+    });
+    test("Delete /user/:id", async () => {
+        const newUser = {
+            email: "test-delete@gmail.com",
+            password: "123456",
+            name: "testDelete",
+            age: "25",
+        };
+    
+
+        const registerRes = await request(app).post("/user/register").send(newUser);
+        expect(registerRes.statusCode).toBe(200);
+        
+        const loginRes = await request(app).post("/user/login").send(newUser);
+        expect(loginRes.statusCode).toBe(200);
+        
+   
+        const authToken = loginRes.body.accessToken;
+        
+
+        const deleteRes = await request(app)
+            .delete("/user/" + registerRes.body._id)
+            .set('Authorization', 'Bearer ' + authToken);
+        
+        expect(deleteRes.statusCode).toBe(200);
+    
+
+        const userAfterDelete = await User.findById(registerRes.body._id);
+        expect(userAfterDelete).toBeNull();
+    });
+    
     
 });

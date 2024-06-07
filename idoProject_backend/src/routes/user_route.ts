@@ -118,7 +118,7 @@ import userMiddleware from '../common/user_middleware';
 router.get("/", userMiddleware,UserController.getUser.bind(UserController));
 /**
  * @swagger
- * /users/{id}:
+ * /user/{id}:
  *   delete:
  *     summary: Remove a user
  *     tags: [User]
@@ -163,16 +163,58 @@ router.get("/", userMiddleware,UserController.getUser.bind(UserController));
  *                   type: string
  *                   example: User not found
  */
-
 router.delete('/:id',userMiddleware,UserController.remove.bind(UserController));
 
-router.get("/",userMiddleware,UserController.getById.bind(UserController));
-
-router.post("/", userMiddleware,UserController.post.bind(UserController));
-
+/**
+ * @swagger
+ * /user/{id}:
+ *   put:
+ *     summary: Update a user
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: The user was updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error message
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ */
 router.put("/:id", userMiddleware,UserController.put.bind(UserController));
-
-router.delete("/:id", userMiddleware,UserController.remove.bind(UserController));
 /**
  * @swagger
  * /user/register:
@@ -226,7 +268,7 @@ router.post('/login',UserController.login.bind(UserController));
 /**
 * @swagger
 * /user/logout:
-*   get:
+*   post:
 *     summary: Logout a user
 *     tags: 
 *       - User
@@ -241,13 +283,10 @@ router.post('/login',UserController.login.bind(UserController));
 *       '403':
 *         description: Forbidden - Invalid token or user not authorized to logout
 */
-
-
-
-router.get('/logout',userMiddleware,UserController.logout.bind(UserController)); 
+router.post('/logout',UserController.logout.bind(UserController)); 
 /**
 * @swagger
-* /auth/refreshToken:
+* /user/refresh:
 *   get:
 *       summary: get a new access token using the refresh token
 *       tags: [User]
@@ -262,7 +301,6 @@ router.get('/logout',userMiddleware,UserController.logout.bind(UserController));
 *                       schema:
 *                           $ref: '#/components/schemas/Tokens'
 */
-
 router.get('/refresh', UserController.refresh.bind(UserController));
 
 
