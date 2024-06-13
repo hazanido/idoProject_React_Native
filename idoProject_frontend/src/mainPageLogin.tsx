@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 
-const LoginScreen: React.FC = () => {
+const mainPageLogin: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -89,4 +89,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default mainPageLogin;
