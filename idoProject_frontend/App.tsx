@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import mainPageLogin from './src/mainPageLogin'; 
 import RegistrationPage from './src/RegistrationPage';
+import FeedPage from './src/FeedPage';
 
 const Stack = createStackNavigator();
 
@@ -18,7 +19,12 @@ const App: React.FC = () => {
         <Stack.Screen
           name="RegistrationPage"
           component={RegistrationPage}
-          options={{ title: 'הרשמה' }}
+          options={{ title: 'Registration' }}
+        />
+        <Stack.Screen
+          name="FeedPage"
+          component={FeedPage}
+          options={{ title: 'Feed' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

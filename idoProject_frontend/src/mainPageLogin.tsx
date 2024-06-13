@@ -1,35 +1,37 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import userAPI from '../api/userAPI';
 import { userModel } from './model/user';
+import { useNavigation } from '@react-navigation/native';
 
-const mainPageLogin: React.FC = () => {
+const mainPageLogin: FC<{navigation: any}> = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  
+  
   const handleLogin = async () => {
     try {
       console.log('Logging in with email:', email, 'and password:', password)
       const user = await userModel.loginUser({
-        id: '', // ניתן להשאיר ריק, מאחר והוא יתווסף על ידי השרת
-        name: '', // ניתן להשאיר ריק, מאחר והוא יתווסף על ידי השרת
-        age: 0, // ניתן להשאיר ריק, מאחר והוא יתווסף על ידי השרת
-        imgUrl: '', // ניתן להשאיר ריק, מאחר והוא יתווסף על ידי השרת
+        id: '', 
+        name: '', 
+        age: 0, 
+        imgUrl: '', 
         email,
         password,
       });
       console.log('Logged in user:', user);
+      navigation.navigate('postPage');
     } catch (error) {
       console.error('Error logging in:', error);
-      // טיפול בשגיאה, לדוגמה - הצגת הודעת שגיאה למשתמש
     }
   };
   
   
 
   const handleRegister = () => {
-    
+    navigation.navigate('RegistrationPage');
   };
 
   const handleGoogleLogin = () => {
