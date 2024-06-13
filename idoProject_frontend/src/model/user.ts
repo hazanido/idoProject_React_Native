@@ -1,4 +1,3 @@
-import backAPI from "../../api/backAPI"
 import userAPI from "../../api/userAPI"
 
 
@@ -47,16 +46,14 @@ createUser: async (user: User): Promise<User> => {
   },
   
 
-
-loginUser : async (credentials: any) => {
-    console.log('try to login');
-    const response = await backAPI.post('/user/login', credentials);
-    console.log('Server response:', response);
-    if (response.ok) {
-      return response.data;
-    } else {
-      console.error('Login request failed:', response.problem);
-      return null;
+loginUser: async (user: User): Promise<User> => {
+    try {
+        console.log('Logging in with email:', user.email, 'and password)', user.password)
+      const response = await userAPI.loginUser(user);
+      return response.data as User; // Assuming the response contains the logged-in user data or can be converted to User type
+    } catch (error) {
+      console.error('Error logging in user:', error);
+      throw error; // Handle the error as needed
     }
   },
   

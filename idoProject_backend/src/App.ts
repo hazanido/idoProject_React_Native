@@ -1,5 +1,6 @@
 import express, {Express} from 'express';
 const app = express();
+import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
 import mongoose from 'mongoose';
@@ -9,6 +10,7 @@ import post_route from './routes/post_route';
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(cors());
 
 const appInit = () =>{
    const promise = new Promise<Express>((resolve) => {
