@@ -1,4 +1,9 @@
+import backAPI from "../../api/backAPI"
+import userAPI from "../../api/userAPI"
+
+
 export type User = {
+    id: any
     name: string,
     password: string
     email: string
@@ -6,38 +11,65 @@ export type User = {
     imgUrl: string
 }
 
+export const userModel = {
 
-const getAllUsers = async (): Promise<User[]> => {
-    console.log('getAllUsers');
+    getAllUsers: async (): Promise<User[]> => {
+        try {
+          const response = await userAPI.getAllUser();
+          return response.data as User[]; // Assuming the response contains the list of users
+        } catch (error) {
+          console.error('Error getting all users:', error);
+          throw error; // Handle the error as needed
+        }
+      },
+      
+
+
+getUser: async (id: string): Promise<User> => {
     try {
-    const response = await fetch('http://localhost:3000/user');
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      const response = await userAPI.getUser(id);
+      return response.data as User; // Assuming the response contains the user data
+    } catch (error) {
+      console.error('Error getting user:', error);
+      throw error; // Handle the error as needed
     }
-    const users: User[] = await response.json();
-    console.log('Fetched users:', users);
-    return users;
-  } catch (error) {
-    console.error('Failed to fetch users:', error);
-    return []; 
-  }
-};
+  },
+  
+
+createUser: async (user: User): Promise<User> => {
+    try {
+      const response = await userAPI.registerUser(user);
+      return response.data as User; // Assuming the response contains the newly created user data
+    } catch (error) {
+      console.error('Error creating user:', error);
+      throw error; // Handle the error as needed
+    }
+  },
+  
 
 
-const getUser = async (id: string): Promise<User> => {
-    const response = await fetch(`http://localhost:3000/user/${id}`);
-    const user = await response.json();
-    return user;
-}
+loginUser : async (credentials: any) => {
+    console.log('try to login');
+    const response = await backAPI.post('/user/login', credentials);
+    console.log('Server response:', response);
+    if (response.ok) {
+      return response.data;
+    } else {
+      console.error('Login request failed:', response.problem);
+      return null;
+    }
+  },
+  
 
-const createUser = async (user: User): Promise<User> => {
-    const response = await fetch('http://localhost:3000/user', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(user),
-    });
-    const newUser = await response.json();
-    return newUser;
+  updateUser: async (user: User): Promise<User> => {
+    try {
+      const response = await userAPI.updateUser(user);
+      return response.data as User; // Assuming the response contains the updated user data
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw error; // Handle the error as needed
+    }
+  },
+  
+
 }

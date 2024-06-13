@@ -167,6 +167,38 @@ class UserController extends base_1.default {
             }));
         });
     }
+    logout(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("logout");
+            const userHeader = req.headers['authorization'];
+            const refreshToken = userHeader && userHeader.split(' ')[1];
+            if (refreshToken == null) {
+                return res.status(401).send("missing token");
+            }
+            jsonwebtoken_1.default.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, userId) => __awaiter(this, void 0, void 0, function* () {
+                if (err) {
+                    console.log(err);
+                    return res.status(403).send("Invalid token");
+                }
+                try {
+                    const user = yield userModel_1.default.findById(userId._id);
+                    if (!user) {
+                        return res.status(404).send("User not found");
+                    }
+                    if (!user.tokens || !user.tokens.includes(refreshToken)) {
+                        return res.status(403).send("invalid token");
+                    }
+                    user.tokens = user.tokens.filter(token => token != refreshToken);
+                    yield user.save();
+                    return res.status(200).send("logout successfully");
+                }
+                catch (error) {
+                    console.log(error);
+                    return res.status(500).send("Internal server error");
+                }
+            }));
+        });
+    }
 }
 exports.default = new UserController();
 //# sourceMappingURL=user.js.map

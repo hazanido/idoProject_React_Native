@@ -45,8 +45,8 @@ class BaseController {
         });
     }
     put(req, res) {
-        console.log(" put");
-        res.status(400).send("Not implemented");
+        console.log("item put");
+        res.status(400).send("not implemented");
     }
     remove(req, res) {
         return __awaiter(this, void 0, void 0, function* () {

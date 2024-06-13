@@ -90,9 +90,37 @@ describe("User test", () => {
         const res4 = yield (0, supertest_1.default)(app).get("/user/refresh").set('Authorization', 'Bearer ' + refreshToken2).send();
         expect(res4.statusCode).not.toBe(200);
     }));
-    // test("Post /logout", async () => {
-    //     const res = await request(app).post("/user/login").send(user);
-    //     expect(res.statusCode).toBe(200);
-    // });
+    test("Post /logout", () => __awaiter(void 0, void 0, void 0, function* () {
+        const res = yield (0, supertest_1.default)(app).post("/user/login").send(user);
+        expect(res.statusCode).toBe(200);
+        console.log(res.body);
+        const accessToken = res.body.accessToken;
+        const refreshToken = res.body.refreshToken;
+        expect(accessToken).not.toBeNull();
+        expect(refreshToken).not.toBeNull();
+        const res2 = yield (0, supertest_1.default)(app).post("/user/logout").set('Authorization', 'Bearer ' + refreshToken);
+        expect(res2.statusCode).toBe(200);
+        const res3 = yield (0, supertest_1.default)(app).get("/user").set('Authorization', 'Bearer ' + refreshToken);
+        expect(res3.statusCode).not.toBe(200);
+    }));
+    test("Delete /user/:id", () => __awaiter(void 0, void 0, void 0, function* () {
+        const newUser = {
+            email: "test-delete@gmail.com",
+            password: "123456",
+            name: "testDelete",
+            age: "25",
+        };
+        const registerRes = yield (0, supertest_1.default)(app).post("/user/register").send(newUser);
+        expect(registerRes.statusCode).toBe(200);
+        const loginRes = yield (0, supertest_1.default)(app).post("/user/login").send(newUser);
+        expect(loginRes.statusCode).toBe(200);
+        const authToken = loginRes.body.accessToken;
+        const deleteRes = yield (0, supertest_1.default)(app)
+            .delete("/user/" + registerRes.body._id)
+            .set('Authorization', 'Bearer ' + authToken);
+        expect(deleteRes.statusCode).toBe(200);
+        const userAfterDelete = yield userModel_1.default.findById(registerRes.body._id);
+        expect(userAfterDelete).toBeNull();
+    }));
 });
 //# sourceMappingURL=user.test.js.map
