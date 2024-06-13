@@ -48,11 +48,11 @@ class BaseController<ModelType> {
         }
     }
 
-     async put(req: Request, res: Response) {
-        console.log("item put");
+    async put(req: Request, res: Response) {
+        console.log("put");
         try {
             const item = await this.itemModel.findByIdAndUpdate(req.params.id, req.body );
-            
+            // console.log("item: ", item);
             if (!item) {
                 return res.status(404).send("not found");
             } else {
