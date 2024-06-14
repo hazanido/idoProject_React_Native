@@ -28,6 +28,15 @@ const userAPI = {
         return backAPI.post('/user/register', user)
     },
 
+    logoutUser: async (token: string) => {
+        console.log("try to logout")
+        return backAPI.post('/user/logout', {}, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+
     googleUser: async (user: User) => {
         return backAPI.post('/user/google', user)
     },

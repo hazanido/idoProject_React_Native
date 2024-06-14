@@ -1,30 +1,50 @@
 import React, { FC, useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import postAPI from '../api/postAPI';
 import { Post, postModel } from './model/post';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import userAPI from '../api/userAPI';
 
 const FeedPage: FC<{navigation: any}> = ({navigation}) => {
   const [posts, setPosts] = useState<Post[]>([]);
-  
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await postModel.getAllPosts();
+        const token = await AsyncStorage.getItem('userToken');
+        console.log('Fetched token:', token);
+        if (!token) {
+          console.log('No token found, navigating to MainPageLogin');
+          navigation.navigate('MainPageLogin');
+          return;
+        }
+        
+        const response = await postModel.getAllPosts(token);
+        console.log('Fetched posts:', response);
         setPosts(response);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching posts:', error);
         Alert.alert('Error', 'Failed to fetch posts. Please try again later.');
+        navigation.navigate('MainPageLogin'); // אם יש שגיאה, נוודא שהמשתמש מועבר חזרה
       }
     };
 
     fetchPosts();
   }, []);
 
-  const handleLogout = () => {
-    // Add logout logic here
-    navigation.navigate('mainPageLogin');
+  const handleLogout = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      if (token) {
+        await userAPI.logoutUser(token); // קריאה לפונקציה מה-API
+        await AsyncStorage.removeItem('userToken'); // מחיקת הטוקן מהאחסון
+        console.log('Logging out and navigating to MainPageLogin');
+        navigation.navigate('MainPageLogin');
+      }
+    } catch (error: any) {
+      console.error('Error logging out:', error);
+      Alert.alert('Error', error.message);
+    }
   };
 
   const handleProfile = () => {
@@ -54,19 +74,19 @@ const FeedPage: FC<{navigation: any}> = ({navigation}) => {
       <FlatList
         data={posts}
         renderItem={renderPost}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
         contentContainerStyle={styles.list}
       />
       <View style={styles.footer}>
         <TouchableOpacity onPress={handleLogout}>
-          <Image source={require('../assets/log-out.svg')} style={styles.footerButtonImage} />
+          <Image source={require('../assets/log-out.png')} style={styles.footerButtonImage} />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleProfile}>
-          <Image source={require('../assets/user.svg')} style={styles.footerButtonImage} />
+          <Image source={require('../assets/user.png')} style={styles.footerButtonImage} />
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.floatingButton} onPress={handleAddPost}>
-        <Image source={require('../assets/plus.svg')} style={styles.floatingButtonImage} />
+        <Image source={require('../assets/plus.png')} style={styles.floatingButtonImage} />
       </TouchableOpacity>
     </View>
   );
@@ -95,7 +115,7 @@ const styles = StyleSheet.create({
   },
   list: {
     paddingHorizontal: 16,
-    paddingBottom: 100, // for footer and floating button
+    paddingBottom: 100,
   },
   postContainer: {
     flexDirection: 'row',
@@ -130,7 +150,7 @@ const styles = StyleSheet.create({
   floatingButton: {
     position: 'absolute',
     right: 16,
-    bottom: 80, // above footer
+    bottom: 80,
     width: 56,
     height: 56,
     borderRadius: 28,

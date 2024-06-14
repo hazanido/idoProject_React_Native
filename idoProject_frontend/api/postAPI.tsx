@@ -1,26 +1,46 @@
-import backAPI from "./backAPI";
 import { Post } from "../src/model/post";
+import backAPI from "./backAPI";
 
 const postAPI = {
-    getAllPost: async () => {
-        return backAPI.get('/post')
-    },
+  getAllPost: async (token: string) => {
+    return backAPI.get('/post', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  },
 
-    getPost: async (id: string) => {
-        return backAPI.get(`/post/${id}`)
-    },
+  getPost: async (id: string, token: string) => {
+    return backAPI.get(`/post/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  },
 
-    createPost: async (post: Post) => {
-        return backAPI.post('/post', post)
-    },
+  createPost: async (post: Post, token: string) => {
+    return backAPI.post('/post', post, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  },
 
-    updatePost: async (post: Post) => {
-        return backAPI.put(`/post/${post.id}`, post)
-    },
+  updatePost: async (post: Post, token: string) => {
+    return backAPI.put(`/post/${post.id}`, post, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  },
 
-    deletePost: async (id: string) => {
-        return backAPI.delete(`/post/${id}`)
-    },
+  deletePost: async (id: string, token: string) => {
+    return backAPI.delete(`/post/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  },
 };
 
 export default postAPI;

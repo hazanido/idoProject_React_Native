@@ -1,19 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { FC, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import userAPI from '../api/userAPI';
 import { userModel } from './model/user';
-import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const mainPageLogin: FC<{navigation: any}> = ({navigation}) => {
+const MainPageLogin: FC<{navigation: any}> = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
-  
+
   const handleLogin = async () => {
     try {
-      console.log('Logging in with email:', email, 'and password:', password)
-      const user = await userModel.loginUser({
+      console.log('Logging in with email:', email, 'and password:', password);
+      const response = await userModel.loginUser({
         id: '', 
         name: '', 
         age: 0, 
@@ -21,21 +19,27 @@ const mainPageLogin: FC<{navigation: any}> = ({navigation}) => {
         email,
         password,
       });
-      console.log('Logged in user:', user);
-      navigation.navigate('FeedPage');
+      console.log('Server response:', response);
+      const { accessToken, refreshToken } = response;
+      if (accessToken && refreshToken) {
+        await AsyncStorage.setItem('accessToken', accessToken);
+        await AsyncStorage.setItem('refreshToken', refreshToken);
+        console.log('Logged in successfully');
+        navigation.navigate('FeedPage');
+      } else {
+        console.error('No token found in response');
+      }
     } catch (error) {
       console.error('Error logging in:', error);
     }
   };
-  
-  
 
   const handleRegister = () => {
     navigation.navigate('RegistrationPage');
   };
 
   const handleGoogleLogin = () => {
-    
+    // Add Google login logic here
   };
 
   return (
@@ -109,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default mainPageLogin;
+export default MainPageLogin;

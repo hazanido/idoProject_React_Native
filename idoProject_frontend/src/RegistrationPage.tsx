@@ -17,7 +17,7 @@ const RegistrationPage: FC<{navigation: any}> = ({navigation}) => {
         password: password,
         age: parseInt(age, 10),
         imgUrl: '',
-        id: undefined
+        id: undefined,
       });
       Alert.alert('Success', 'Registration successful. Please log in.');
       navigation.navigate('mainPageLogin');

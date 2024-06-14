@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import mainPageLogin from './src/mainPageLogin'; 
+import MainPageLogin from './src/mainPageLogin'; 
 import RegistrationPage from './src/RegistrationPage';
 import FeedPage from './src/FeedPage';
 
@@ -10,10 +10,10 @@ const Stack = createStackNavigator();
 const App: React.FC = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="mainPageLogin">
+      <Stack.Navigator initialRouteName="MainPageLogin">
       <Stack.Screen
-          name="mainPageLogin"
-          component={mainPageLogin}
+          name="MainPageLogin"
+          component={MainPageLogin}
           options={{ headerShown: false }}
         />
         <Stack.Screen
