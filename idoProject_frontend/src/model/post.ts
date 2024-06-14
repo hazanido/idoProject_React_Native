@@ -13,40 +13,40 @@ export const postModel = {
     getAllPosts: async (token: string): Promise<Post[]> => {
         try {
           const response = await postAPI.getAllPost(token);
-          return response.data as Post[]; // Assuming the response contains the list of posts
+          return response.data as Post[]; 
         } catch (error) {
           console.error('Error getting all posts:', error);
-          throw error; // Handle the error as needed
+          throw error; 
         }
       },
 
     getPost: async (id: string, token: string): Promise<Post> => {
         try {
           const response = await postAPI.getPost(id, token);
-          return response.data as Post; // Assuming the response contains the post data
+          return response.data as Post; 
         } catch (error) {
           console.error('Error getting post:', error);
-          throw error; // Handle the error as needed
+          throw error; 
         }
       },
 
     createPost: async (post: Post, token: string): Promise<Post> => {
         try {
           const response = await postAPI.createPost(post, token);
-          return response.data as Post; // Assuming the response contains the newly created post data
+          return response.data as Post; 
         } catch (error) {
           console.error('Error creating post:', error);
-          throw error; // Handle the error as needed
+          throw error; 
         }
       },
 
     updatePost: async (post: Post, token: string): Promise<Post> => {
         try {
           const response = await postAPI.updatePost(post, token);
-          return response.data as Post; // Assuming the response contains the updated post data
+          return response.data as Post; 
         } catch (error) {
           console.error('Error updating post:', error);
-          throw error; // Handle the error as needed
+          throw error; 
         }
       },
 
@@ -55,7 +55,7 @@ export const postModel = {
           await postAPI.deletePost(id, token);
         } catch (error) {
           console.error('Error deleting post:', error);
-          throw error; // Handle the error as needed
+          throw error; 
         }
       }
 }

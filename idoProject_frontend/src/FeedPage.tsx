@@ -11,7 +11,7 @@ const FeedPage: FC<{navigation: any}> = ({navigation}) => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const token = await AsyncStorage.getItem('userToken');
+        const token = await AsyncStorage.getItem('accessToken');
         console.log('Fetched token:', token);
         if (!token) {
           console.log('No token found, navigating to MainPageLogin');
@@ -25,7 +25,7 @@ const FeedPage: FC<{navigation: any}> = ({navigation}) => {
       } catch (error: any) {
         console.error('Error fetching posts:', error);
         Alert.alert('Error', 'Failed to fetch posts. Please try again later.');
-        navigation.navigate('MainPageLogin'); // אם יש שגיאה, נוודא שהמשתמש מועבר חזרה
+        navigation.navigate('MainPageLogin'); 
       }
     };
 
@@ -34,18 +34,22 @@ const FeedPage: FC<{navigation: any}> = ({navigation}) => {
 
   const handleLogout = async () => {
     try {
-      const token = await AsyncStorage.getItem('userToken');
-      if (token) {
-        await userAPI.logoutUser(token); // קריאה לפונקציה מה-API
-        await AsyncStorage.removeItem('userToken'); // מחיקת הטוקן מהאחסון
-        console.log('Logging out and navigating to MainPageLogin');
+      const refreshToken = await AsyncStorage.getItem('refreshToken');
+      console.log('Refresh token for logout:', refreshToken);
+      if (refreshToken) {
+        await userAPI.logoutUser(refreshToken);
+        await AsyncStorage.removeItem('accessToken');
+        await AsyncStorage.removeItem('refreshToken');
+        console.log('Logged out successfully, navigating to MainPageLogin');
         navigation.navigate('MainPageLogin');
       }
     } catch (error: any) {
       console.error('Error logging out:', error);
       Alert.alert('Error', error.message);
+      
     }
   };
+  
 
   const handleProfile = () => {
     navigation.navigate('ProfilePage');

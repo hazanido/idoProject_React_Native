@@ -28,12 +28,11 @@ const userAPI = {
         return backAPI.post('/user/register', user)
     },
 
-    logoutUser: async (token: string) => {
-        console.log("try to logout")
+    logoutUser: async (refreshToken: string) => {
         return backAPI.post('/user/logout', {}, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+          headers: {
+            'Authorization': `Bearer ${refreshToken}`
+          }
         });
     },
 

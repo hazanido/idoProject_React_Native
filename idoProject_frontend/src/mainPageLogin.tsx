@@ -25,6 +25,12 @@ const MainPageLogin: FC<{navigation: any}> = ({navigation}) => {
         await AsyncStorage.setItem('accessToken', accessToken);
         await AsyncStorage.setItem('refreshToken', refreshToken);
         console.log('Logged in successfully');
+
+        const storedAccessToken = await AsyncStorage.getItem('accessToken');
+        const storedRefreshToken = await AsyncStorage.getItem('refreshToken');
+        console.log('Stored accessToken:', storedAccessToken);
+        console.log('Stored refreshToken:', storedRefreshToken);
+
         navigation.navigate('FeedPage');
       } else {
         console.error('No token found in response');
