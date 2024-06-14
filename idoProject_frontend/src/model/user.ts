@@ -12,7 +12,7 @@ export type User = {
 
 export const userModel = {
 
-    getAllUsers: async (): Promise<User[]> => {
+getAllUsers: async (): Promise<User[]> => {
         try {
           const response = await userAPI.getAllUser();
           return response.data as User[]; // Assuming the response contains the list of users

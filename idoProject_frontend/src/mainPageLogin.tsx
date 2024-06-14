@@ -22,7 +22,7 @@ const mainPageLogin: FC<{navigation: any}> = ({navigation}) => {
         password,
       });
       console.log('Logged in user:', user);
-      navigation.navigate('postPage');
+      navigation.navigate('FeedPage');
     } catch (error) {
       console.error('Error logging in:', error);
     }
@@ -58,10 +58,10 @@ const mainPageLogin: FC<{navigation: any}> = ({navigation}) => {
         secureTextEntry
       />
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Image source={require('../assets/signIn.png')} style={styles.buttonImage} />
+        <Image source={require('../assets/signIn11.png')} style={styles.buttonImage} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Image source={require('../assets/signUp.png')} style={styles.buttonImage} />
+        <Image source={require('../assets/signUp11.png')} style={styles.buttonImage} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={handleGoogleLogin}>
         <Image source={require('../assets/google.png')} style={styles.buttonImage} />
