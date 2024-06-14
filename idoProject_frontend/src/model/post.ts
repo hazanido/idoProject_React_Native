@@ -2,7 +2,8 @@ import  postAPI  from "../../api/postAPI"
 import { User } from './user';
 
 export type Post = {
-    id: any
+    id: any;
+   
     title: string,
     message: string
     sender: User

@@ -1,54 +1,102 @@
 import React, { FC, useState } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
+import { userModel } from './model/user';
 
 const RegistrationPage: FC<{navigation: any}> = ({navigation}) => {
-  
-
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
   const [age, setAge] = useState('');
 
-  const handleRegistration = () => {
-    // כאן יתבצע טיפול בלוגיקה של ההרשמה, כולל בדיקת תקינות נתונים ושליחת בקשה לשרת
-    if (email && password && name && age) {
-      // אם המשתמש נרשם בהצלחה, נציג הודעה ונעביר לעמוד התחברות
-      Alert.alert('ההרשמה הושלמה', 'נרשמת בהצלחה!', [{ text: 'הבנתי', onPress: () => navigation.navigate('mainPageLogin') }]);
-    } else {
-      // אם יש שדה ריק, נציג הודעת שגיאה
-      Alert.alert('שגיאה', 'יש למלא את כל השדות');
+  const handleRegister = async () => {
+    try {
+      const response = await userModel.createUser({
+        name: name,
+        email: email,
+        password: password,
+        age: parseInt(age, 10),
+        imgUrl: '',
+        id: undefined
+      });
+      Alert.alert('Success', 'Registration successful. Please log in.');
+      navigation.navigate('mainPageLogin');
+    } catch (error: any) {
+      console.error('Error registering:', error);
+      Alert.alert('Error', error.message || 'Registration failed. Please try again.');
     }
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>הרשמה</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>הרשמה</Text>
       <TextInput
-        placeholder="אימייל"
-        onChangeText={(text) => setEmail(text)}
-        value={email}
-      />
-      <TextInput
-        placeholder="סיסמה"
-        onChangeText={(text) => setPassword(text)}
-        value={password}
-        secureTextEntry={true}
-      />
-      <TextInput
-        placeholder="שם"
-        onChangeText={(text) => setName(text)}
+        style={styles.input}
+        placeholder="הכנס שם"
         value={name}
+        onChangeText={setName}
       />
       <TextInput
-        placeholder="גיל"
-        onChangeText={(text) => setAge(text)}
-        value={age}
+        style={styles.input}
+        placeholder="הכנס אימייל"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
-      <Button title="הרשמה" onPress={handleRegistration} />
+      <TextInput
+        style={styles.input}
+        placeholder="הכנס סיסמה"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="הכנס גיל"
+        value={age}
+        onChangeText={setAge}
+        keyboardType="numeric"
+      />
+      <TouchableOpacity style={styles.button} onPress={handleRegister}>
+        <Image source={require('../assets/Register.png')} style={styles.buttonImage} />
+      </TouchableOpacity>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+    padding: 16,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  input: {
+    width: '80%',
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+    backgroundColor: '#fff',
+    textAlign: 'right',
+  },
+  button: {
+    marginVertical: 20,
+  },
+  buttonImage: {
+    width: 310,
+    height: 90,
+    resizeMode: 'contain',
+  },
+});
 
 export default RegistrationPage;
