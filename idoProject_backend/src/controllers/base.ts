@@ -51,19 +51,18 @@ class BaseController<ModelType> {
     async put(req: Request, res: Response) {
         console.log("put");
         try {
-            const item = await this.itemModel.findByIdAndUpdate(req.params.id, req.body );
-            // console.log("item: ", item);
+            const item = await this.itemModel.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
             if (!item) {
                 return res.status(404).send("not found");
             } else {
                 return res.status(200).send(item);
             }
-            
         } catch (error) {
             console.log(error);
             res.status(400).send(error.message);
         }
     }
+    
 
     async remove(req: Request, res: Response) {
         console.log(" delete");
