@@ -23,24 +23,7 @@ class PostController extends base_1.default {
             post: { get: () => super.post }
         });
         return __awaiter(this, void 0, void 0, function* () {
-            req.body.owner = req.body.user._id;
             _super.post.call(this, req, res);
-        });
-    }
-    allPost(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const posts = yield postModel_1.default.find({});
-                res.json(posts);
-            }
-            catch (err) {
-                res.status(500).send('Error retrieving posts from database');
-            }
-        });
-    }
-    deletePost(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            res.status(400);
         });
     }
 }

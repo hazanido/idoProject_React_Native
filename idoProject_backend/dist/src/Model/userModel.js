@@ -22,6 +22,9 @@ const UserSchema = new mongoose_1.default.Schema({
         type: Number,
         required: true,
     },
+    imgUrl: {
+        type: String,
+    },
     tokens: {
         type: [String]
     }

@@ -13,6 +13,26 @@ class BaseController {
     constructor(itemModel) {
         this.itemModel = itemModel;
     }
+    get(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("get");
+            try {
+                if (req.query.name) {
+                    const filterQuery = { name: req.query.name };
+                    const item = yield this.itemModel.find(filterQuery);
+                    res.status(200).send(item);
+                }
+                else {
+                    const item = yield this.itemModel.find();
+                    res.status(200).send(item);
+                }
+            }
+            catch (error) {
+                console.log(error);
+                res.status(400).send(error.message);
+            }
+        });
+    }
     getById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -45,8 +65,22 @@ class BaseController {
         });
     }
     put(req, res) {
-        console.log("item put");
-        res.status(400).send("not implemented");
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("put");
+            try {
+                const item = yield this.itemModel.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+                if (!item) {
+                    return res.status(404).send("not found");
+                }
+                else {
+                    return res.status(200).send(item);
+                }
+            }
+            catch (error) {
+                console.log(error);
+                res.status(400).send(error.message);
+            }
+        });
     }
     remove(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
