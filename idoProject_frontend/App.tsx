@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import MainPageLogin from './src/mainPageLogin'; 
 import RegistrationPage from './src/RegistrationPage';
 import FeedPage from './src/FeedPage';
+import AddPostPage from './src/AddPostPage';
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,11 @@ const App: React.FC = () => {
           name="FeedPage"
           component={FeedPage}
           options={{ title: 'Feed' }}
+        />
+        <Stack.Screen
+          name="AddPostPage"
+          component={AddPostPage}
+          options={{ title: 'Add Post' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

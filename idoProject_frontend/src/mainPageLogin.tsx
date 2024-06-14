@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { FC, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import { userModel } from './model/user';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -34,9 +34,11 @@ const MainPageLogin: FC<{navigation: any}> = ({navigation}) => {
         navigation.navigate('FeedPage');
       } else {
         console.error('No token found in response');
+        Alert.alert('Error', 'Login failed. Please check your email and password.');
       }
     } catch (error) {
       console.error('Error logging in:', error);
+      Alert.alert('Error', 'Login failed. Please check your email and password.');
     }
   };
 

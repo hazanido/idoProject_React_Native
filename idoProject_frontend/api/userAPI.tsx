@@ -25,7 +25,12 @@ const userAPI = {
     },
 
     registerUser: async (user: User) => {
-        return backAPI.post('/user/register', user)
+        try {
+            const response = await backAPI.post('/user/register', user);
+            return response;
+          } catch (error: any) {
+            throw error.response || error;
+          }
     },
 
     logoutUser: async (refreshToken: string) => {

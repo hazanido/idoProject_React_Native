@@ -20,10 +20,14 @@ const RegistrationPage: FC<{navigation: any}> = ({navigation}) => {
         id: undefined,
       });
       Alert.alert('Success', 'Registration successful. Please log in.');
-      navigation.navigate('mainPageLogin');
+      navigation.navigate('MainPageLogin');
     } catch (error: any) {
       console.error('Error registering:', error);
-      Alert.alert('Error', error.message || 'Registration failed. Please try again.');
+      if (error.message && error.message === 'Email already in use') {
+        Alert.alert('Error', 'Email already in use. Please try again with a different email.');
+      } else {
+        Alert.alert('Error', error.message || 'Registration failed. Please try again.');
+      }
     }
   };
 

@@ -40,7 +40,9 @@ class UserController extends BaseController<IUser>{
         try {
             const user = await User.findOne({email: email});
             if (user) {
-                return  res.status(400).send("user already exists");
+                console.log("user already exists");
+                return res.status(409).json({ message: 'Email already in use' });
+
             }
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password,salt);
