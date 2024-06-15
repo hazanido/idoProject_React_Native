@@ -1,6 +1,5 @@
-
-import backAPI from "./backAPI";
 import { Post } from "../src/model/post";
+import backAPI from "./backAPI";
 
 const postAPI = {
   getAllPost: async (token: string) => {

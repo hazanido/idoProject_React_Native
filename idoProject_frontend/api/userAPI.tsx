@@ -1,49 +1,49 @@
+// userAPI.ts
 import { User } from "../src/model/user";
 import backAPI from "./backAPI";
 
 const userAPI = {
-    getAllUser: async () => {
-        return backAPI.get('/user')
-    },
+  getAllUser: async () => {
+    return backAPI.get('/user');
+  },
 
-    getUser: async (id: string) => {
-        return backAPI.get(`/user/${id}`)
-    },
+  getUser: async (id: string) => {
+    return backAPI.get(`/user/${id}`);
+  },
 
-    updateUser: async (user: User) => {
-        return backAPI.put(`/user/${user.id}`, user)
-    },
+  updateUser: async (user: User) => {
+    return backAPI.put(`/user/${user.id}`, user);
+  },
 
-    deleteUser: async (id: string) => {
-        return backAPI.delete(`/user/${id}`)
-    },
+  deleteUser: async (id: string) => {
+    return backAPI.delete(`/user/${id}`);
+  },
 
-    loginUser: async (user: User) => {
-        console.log("try to login")
-        return backAPI.post('/user/login', user)
-        
-    },
+  loginUser: async (user: User) => {
+    console.log("try to login");
+    return backAPI.post('/user/login', user);
+  },
 
-    registerUser: async (user: User) => {
-        try {
-            const response = await backAPI.post('/user/register', user);
-            return response;
-          } catch (error: any) {
-            throw error.response || error;
-          }
-    },
+  registerUser: async (user: User) => {
+    return backAPI.post('/user/register', user);
+  },
 
-    logoutUser: async (refreshToken: string) => {
-        return backAPI.post('/user/logout', {}, {
-          headers: {
-            'Authorization': `Bearer ${refreshToken}`
-          }
-        });
-    },
+  logoutUser: async (token: string) => {
+    console.log("try to logout");
+    return backAPI.post('/user/logout', {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  },
 
-    googleUser: async (user: User) => {
-        return backAPI.post('/user/google', user)
-    },
+  googleUser: async (user: User) => {
+    return backAPI.post('/user/google', user);
+  },
+
+  getCurrentUser: async (token: string) => {
+    return backAPI.get('/user/me', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
 };
 
 export default userAPI;
