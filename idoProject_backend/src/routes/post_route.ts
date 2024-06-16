@@ -44,9 +44,9 @@ import postController from '../controllers/post';
  *       title: 'Sample Post Title'
  *       message: 'This is a sample post message.'
  *       sender:
- *         _id: '6662d0370781cf5fef32f831'
+ *         _id: '666eba52ad9fa7c9c653db90'
  *         name: 'ido'
- *         imgUrl: 'http://example.com/image.jpg'
+ *         imgUrl: 'idoProject_backend/imageUser/defultImag.jpg'
  */
 
 

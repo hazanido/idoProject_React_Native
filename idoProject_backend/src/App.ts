@@ -1,4 +1,5 @@
 import express, {Express} from 'express';
+import path from 'path'; 
 const app = express();
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -22,7 +23,7 @@ const appInit = () =>{
         } catch (error) {
             console.log('Error connecting to DB: ' + error);
         }
-    
+    app.use('/idoProject_backend/imageUser', express.static(path.join(__dirname, '../imageUser')));
     app.use('/user',user_route);
     app.use('/post',post_route);
     
@@ -34,8 +35,5 @@ const appInit = () =>{
    });
    return promise;
 };
-
-
-
 
 export default appInit;

@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { Post, postModel } from './model/post';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import userAPI from '../api/userAPI';
+import { back_URL } from '../config';
 
 const FeedPage: FC<{navigation: any}> = ({navigation}) => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -65,7 +65,7 @@ const FeedPage: FC<{navigation: any}> = ({navigation}) => {
 
   const renderPost = ({ item }: { item: Post }) => (
     <TouchableOpacity style={styles.postContainer} onPress={() => handlePostPress(item)}>
-      <Image source={{ uri: item.sender.imgUrl }} style={styles.postImage} />
+      <Image source={{ uri: `${back_URL}${item.sender.imgUrl}` }} style={styles.postImage} />
       <View style={styles.postContent}>
         <Text style={styles.postTitle}>{item.title}</Text>
         <Text style={styles.postMessage}>{item.message}</Text>

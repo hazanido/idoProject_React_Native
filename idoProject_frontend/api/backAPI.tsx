@@ -1,7 +1,8 @@
 import { create } from "apisauce";
+import {back_URL} from '../config'
 
 const backAPI = create({
- baseURL: 'http://10.0.0.17:3000',
+ baseURL: `${back_URL}`,
  headers: { Accept: 'application/vnd.github.v3+json' },
 })
 export default backAPI

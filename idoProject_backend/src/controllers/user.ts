@@ -50,6 +50,7 @@ class UserController extends BaseController<IUser>{
                 password: hashedPassword,
                 email: req.body.email,
                 age: req.body.age,
+                imgUrl: 'idoProject_backend/imageUser/defultImag.jpg'
             
             });
             await newUser.save();
