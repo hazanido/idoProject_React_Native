@@ -9,6 +9,24 @@ class UserController extends BaseController<IUser>{
     constructor() {
         super(User)
     }
+    async getUserByToken (req: Request, res: Response){
+        try {
+            console.log("getUserByToken");
+            console.log("Getting user by token:", req.params.tokens);
+            const token = req.params.tokens;
+            console.log("token:",token);
+            const user = await User.findOne({ tokens: token });
+            console.log("user:",user);  
+            if (!user) {
+              return res.status(404).send("token user not found");
+            } else {
+              return res.status(200).send(user);
+            }
+          } catch (error) {
+            console.log(error);
+            res.status(400).send(error.message);
+          }
+        }
     async getUser (req: Request, res: Response){
         try {
             if (req.query.name) {
@@ -79,6 +97,7 @@ class UserController extends BaseController<IUser>{
             if(!validePassword){
                 return res.status(400).send("invalid password");
             }
+            
             const token =  jwt.sign({
                 _id: user._id
             }, process.env.TOKEN_SECRET, {

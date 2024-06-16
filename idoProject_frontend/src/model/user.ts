@@ -1,8 +1,8 @@
 import userAPI from "../../api/userAPI";
 
 export type User = {
-    id: any
-    name: string,
+    _id: any
+    name: string
     password: string
     email: string
     age: Number
@@ -25,6 +25,17 @@ export const userModel = {
     try {
       const response = await userAPI.getUser(id);
       return response.data as User;
+    } catch (error) {
+      console.error('Error getting user:', error);
+      throw error;
+    }
+  },
+  getUserByToken: async (token: string): Promise<User> => {
+    try {
+      console.log('Getting user by token:', token);
+      const response:any = await userAPI.getUserByToken(token);
+      console.log('1234:',response.data);
+      return response.data;
     } catch (error) {
       console.error('Error getting user:', error);
       throw error;

@@ -7,6 +7,7 @@ import { back_URL } from '../config';
 
 const FeedPage: FC<{navigation: any}> = ({navigation}) => {
   const [posts, setPosts] = useState<Post[]>([]);
+  console.log('posts:', posts);
 
   useEffect(() => {
     const fetchPosts = async () => {

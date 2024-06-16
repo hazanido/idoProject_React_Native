@@ -2,10 +2,10 @@ import postAPI from "../../api/postAPI";
 import { User } from './user';
 
 export type Post = {
-    id: any;
+    id: string;
     title: string;
     message: string;
-    sender: User;
+    sender: {_id: string, name: string, imgUrl: string};
 }
 
 export const postModel = {
@@ -20,9 +20,9 @@ export const postModel = {
         }
       },
 
-    getPost: async (id: string, token: string): Promise<Post> => {
+    getPost: async (_id: string, token: string): Promise<Post> => {
         try {
-          const response = await postAPI.getPost(id, token);
+          const response = await postAPI.getPost(_id, token);
           return response.data as Post; 
         } catch (error) {
           console.error('Error getting post:', error);

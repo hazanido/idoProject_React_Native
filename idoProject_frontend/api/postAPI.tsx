@@ -10,8 +10,8 @@ const postAPI = {
     });
   },
 
-  getPost: async (id: string, token: string) => {
-    return backAPI.get(`/post/${id}`, {
+  getPost: async (_id: string, token: string) => {
+    return backAPI.get(`/post/${_id}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -34,8 +34,8 @@ const postAPI = {
     });
   },
 
-  deletePost: async (id: string, token: string) => {
-    return backAPI.delete(`/post/${id}`, {
+  deletePost: async (_id: string, token: string) => {
+    return backAPI.delete(`/post/${_id}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

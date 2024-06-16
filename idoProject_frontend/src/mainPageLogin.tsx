@@ -12,7 +12,7 @@ const MainPageLogin: FC<{navigation: any}> = ({navigation}) => {
     try {
       console.log('Logging in with email:', email, 'and password:', password);
       const response = await userModel.loginUser({
-        id: '', 
+        _id: '',
         name: '', 
         age: 0, 
         imgUrl: '', 

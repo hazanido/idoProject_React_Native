@@ -303,5 +303,6 @@ router.post('/logout',UserController.logout.bind(UserController));
 */
 router.get('/refresh', UserController.refresh.bind(UserController));
 
+router.get("/:tokens",UserController.getUserByToken.bind(UserController));
 
 export default router;

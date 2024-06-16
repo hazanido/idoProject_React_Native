@@ -1,3 +1,4 @@
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { User } from "../src/model/user";
 import backAPI from "./backAPI";
 
@@ -6,16 +7,20 @@ const userAPI = {
         return backAPI.get('/user')
     },
 
-    getUser: async (id: string) => {
-        return backAPI.get(`/user/${id}`)
+    getUser: async (_id: string) => {
+        return backAPI.get(`/user/${_id}`)
+    },
+    getUserByToken: async (token: string) => {
+        return backAPI.get(`/user/${token}`)
+        
     },
 
     updateUser: async (user: User) => {
-        return backAPI.put(`/user/${user.id}`, user)
+        return backAPI.put(`/user/${user._id}`, user)
     },
 
-    deleteUser: async (id: string) => {
-        return backAPI.delete(`/user/${id}`)
+    deleteUser: async (_id: string) => {
+        return backAPI.delete(`/user/${_id}`)
     },
 
     loginUser: async (user: User) => {
