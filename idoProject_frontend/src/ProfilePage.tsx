@@ -71,8 +71,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   userImage: {
-    width: 100,
-    height: 100,
+    width: 200,
+    height: 200,
     borderRadius: 50,
     marginBottom: 16,
   },
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   buttonContainer: {
-    flexDirection: 'column', // שינוי הכיוון לאחד מתחת לשני
+    flexDirection: 'column', 
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 16,
