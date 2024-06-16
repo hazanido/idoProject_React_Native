@@ -5,6 +5,7 @@ import MainPageLogin from './src/mainPageLogin';
 import RegistrationPage from './src/RegistrationPage';
 import FeedPage from './src/FeedPage';
 import AddPostPage from './src/AddPostPage';
+import ProfilePage from './src/ProfilePage';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,11 @@ const App: React.FC = () => {
           name="AddPostPage"
           component={AddPostPage}
           options={{ title: 'Add Post' }}
+        />
+        <Stack.Screen
+          name="ProfilePage"
+          component={ProfilePage}
+          options={{ title: 'Profile' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
