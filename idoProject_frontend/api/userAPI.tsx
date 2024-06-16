@@ -14,7 +14,9 @@ const userAPI = {
         return backAPI.get(`/user/${token}`)
         
     },
-
+    getPostByUserId: async ( token: string) => {
+        return backAPI.get(`/user/post/${token}` )
+    },
     updateUser: async (user: User) => {
         return backAPI.put(`/user/${user._id}`, user)
     },
@@ -44,6 +46,7 @@ const userAPI = {
     googleUser: async (user: User) => {
         return backAPI.post('/user/google', user)
     },
+    
 };
 
 export default userAPI;

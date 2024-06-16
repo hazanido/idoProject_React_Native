@@ -1,5 +1,6 @@
 import BaseController from './base';
 import User,{IUser} from '../Model/userModel';
+import Post from '../Model/postModel';
 import { Request, Response } from 'express';
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken'
@@ -26,6 +27,27 @@ class UserController extends BaseController<IUser>{
             console.log(error);
             res.status(400).send(error.message);
           }
+        }
+        async getPostByUserId (req: Request, res: Response){
+            console.log("getPostByUser");
+            try {
+                const token = req.params.tokens;
+                if (!token) {
+                    return res.status(400).send("Token is required");
+                }
+        
+                const user = await User.findOne({ tokens: token });
+                if (!user) {
+                    return res.status(404).send("Token user not found");
+                } else {
+                    const posts = await Post.find({ 'sender._id': user._id });
+                    console.log("posts:", posts);
+                    return res.status(200).json(posts);
+                }
+            } catch (error) {
+                console.error(error);
+                return res.status(500).send(error.message);
+            }
         }
     async getUser (req: Request, res: Response){
         try {

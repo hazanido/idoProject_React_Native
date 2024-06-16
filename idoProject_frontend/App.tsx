@@ -6,6 +6,7 @@ import RegistrationPage from './src/RegistrationPage';
 import FeedPage from './src/FeedPage';
 import AddPostPage from './src/AddPostPage';
 import ProfilePage from './src/ProfilePage';
+import MyPostsPage from './src/MyPostsPage';
 
 const Stack = createStackNavigator();
 
@@ -38,6 +39,12 @@ const App: React.FC = () => {
           component={ProfilePage}
           options={{ title: 'Profile' }}
         />
+        <Stack.Screen
+          name = "MyPostsPage"
+          component={MyPostsPage}
+          options={{ title: 'My Posts' }}
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

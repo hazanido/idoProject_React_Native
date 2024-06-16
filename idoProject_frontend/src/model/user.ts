@@ -1,4 +1,6 @@
+import postAPI from "../../api/postAPI";
 import userAPI from "../../api/userAPI";
+import { Post } from "./post";
 
 export type User = {
     _id: any
@@ -68,6 +70,15 @@ export const userModel = {
       return response.data as User;
     } catch (error) {
       console.error('Error updating user:', error);
+      throw error;
+    }
+  },
+  getPostByUserId: async (token: string): Promise<Post[]> => {
+    try {
+      const response = await userAPI.getPostByUserId(token);
+      return response.data as Post[];
+    } catch (error) {
+      console.error('Error getting posts by user ID:', error);
       throw error;
     }
   }

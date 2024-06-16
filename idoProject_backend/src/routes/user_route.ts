@@ -305,4 +305,6 @@ router.get('/refresh', UserController.refresh.bind(UserController));
 
 router.get("/:tokens",UserController.getUserByToken.bind(UserController));
 
+router.get("/post/:tokens",UserController.getPostByUserId.bind(UserController))
+
 export default router;
