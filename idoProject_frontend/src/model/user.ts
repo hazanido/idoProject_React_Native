@@ -34,7 +34,6 @@ export const userModel = {
     try {
       console.log('Getting user by token:', token);
       const response:any = await userAPI.getUserByToken(token);
-      console.log('1234:',response.data);
       return response.data;
     } catch (error) {
       console.error('Error getting user:', error);

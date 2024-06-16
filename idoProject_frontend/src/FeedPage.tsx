@@ -5,9 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import userAPI from '../api/userAPI';
 import { back_URL } from '../config';
 
-const FeedPage: FC<{navigation: any}> = ({navigation}) => {
+const FeedPage: FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
   const [posts, setPosts] = useState<Post[]>([]);
-  console.log('posts:', posts);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -33,6 +32,12 @@ const FeedPage: FC<{navigation: any}> = ({navigation}) => {
     fetchPosts();
   }, []);
 
+  useEffect(() => {
+    if (route.params?.newPost) {
+      setPosts([route.params.newPost, ...posts]);
+    }
+  }, [route.params?.newPost]);
+
   const handleLogout = async () => {
     try {
       const refreshToken = await AsyncStorage.getItem('refreshToken');
@@ -47,10 +52,8 @@ const FeedPage: FC<{navigation: any}> = ({navigation}) => {
     } catch (error: any) {
       console.error('Error logging out:', error);
       Alert.alert('Error', error.message);
-      
     }
   };
-  
 
   const handleProfile = () => {
     navigation.navigate('ProfilePage');

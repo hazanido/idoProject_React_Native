@@ -3,17 +3,15 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } fro
 import { postModel } from './model/post';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User, userModel } from './model/user';
-import { Post } from './model/post';
 
 
-const AddPostPage: FC<{ navigation: any }> = ({ navigation }) => {
+const AddPostPage: FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
 
   const handleCreatePost = async () => {
     try {
       const token = await AsyncStorage.getItem('refreshToken');
-        console.log('Fetched token2323:', token);
       if (!token) {
         console.log('No token found, navigating to MainPageLogin');
         navigation.navigate('MainPageLogin');
@@ -21,17 +19,16 @@ const AddPostPage: FC<{ navigation: any }> = ({ navigation }) => {
       }
 
       const userString = await userModel.getUserByToken(token);
-      console.log('User string:', userString);
       if (!userString) {
         throw new Error('User not found');
       }
 
       const user: User = userString as User;
-      console.log('User34234:', user);
-      const newPost: Post = {
+
+      const newPost = {
         id: '',
-        title: title,
-        message: message,
+        title,
+        message,
         sender: {
             _id: user._id,
             name: user.name,
@@ -39,9 +36,9 @@ const AddPostPage: FC<{ navigation: any }> = ({ navigation }) => {
         },
       };
 
-      await postModel.createPost(newPost, token);
+      const createdPost = await postModel.createPost(newPost, token);
       Alert.alert('Success', 'Post created successfully!');
-      navigation.navigate('FeedPage'); 
+      navigation.navigate('FeedPage', { newPost: createdPost }); 
     } catch (error: any) {
       console.error('Error creating post:', error);
       Alert.alert('Error', 'Failed to create post. Please try again later.');
