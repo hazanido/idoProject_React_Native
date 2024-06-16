@@ -17,7 +17,13 @@ const postSchema = new mongoose.Schema<IPost>({
         type: String,
         require: true
     },
-    sender:{_id: String, name: String, imgUrl: String},
+    sender: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }
+}, {
+    timestamps: true
     
 });
 

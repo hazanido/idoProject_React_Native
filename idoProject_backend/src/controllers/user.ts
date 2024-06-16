@@ -1,22 +1,39 @@
 import BaseController from './base';
-import User,{IUser} from '../Model/userModel';
+import User, { IUser } from '../Model/userModel';
 import { Request, Response } from 'express';
 import bcrypt from "bcrypt";
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 
 
-class UserController extends BaseController<IUser>{
+
+class UserController extends BaseController<IUser> {
     constructor() {
-        super(User)
+        super(User);
     }
-    async getUser (req: Request, res: Response){
+
+    async updateProfileImage(req: Request, res: Response) {
+        const userId = req.params.id;
+        if (!req.file) {
+            return res.status(400).send("No file uploaded");
+        }
+
+        try {
+            const user = await User.findByIdAndUpdate(userId, { imgUrl: req.file.path }, { new: true });
+            if (!user) {
+                return res.status(404).send("User not found");
+            }
+            res.status(200).send(user);
+        } catch (error) {
+            console.log(error);
+            res.status(400).send(error.message);
+        }
+    }
+
+    async getUser(req: Request, res: Response) {
         try {
             if (req.query.name) {
-                
                 const user = await User.findOne({ name: req.query.name } as Partial<IUser>);
                 if (user) {
-                    
-                    console.log(user);
                     return res.status(200).json(user);
                 } else {
                     return res.status(404).json({ message: 'User not found' });
@@ -30,175 +47,175 @@ class UserController extends BaseController<IUser>{
             return res.status(500).json({ message: 'Internal server error' });
         }
     }
-    async register (req: Request,res: Response){
-        console.log("register");
+
+    async register(req: Request, res: Response) {
         const email = req.body.email;
         const password = req.body.password;
         if (email == null || password == null) {
-           return res.status(400).send("missing email or password")
+            return res.status(400).send("missing email or password");
         }
         try {
-            const user = await User.findOne({email: email});
+            const user = await User.findOne({ email: email });
             if (user) {
-                console.log("user already exists");
                 return res.status(409).json({ message: 'Email already in use' });
-
             }
             const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password,salt);
+            const hashedPassword = await bcrypt.hash(password, salt);
 
             const newUser = new User({
                 name: req.body.name,
                 password: hashedPassword,
                 email: req.body.email,
                 age: req.body.age,
-            
             });
             await newUser.save();
             return res.status(200).send(newUser);
         } catch (error) {
-            console.log(error);
-            return res.status(400).send(error.message)
-            
+            return res.status(400).send(error.message);
         }
     }
-    async login (req: Request,res: Response){
-        console.log("login");
+
+    async login(req: Request, res: Response) {
         const email = req.body.email;
         const password = req.body.password;
 
-        console.log(req.body.email);
         if (email == null || password == null) {
-            return res.status(400).send("missing email or password")
-         }
-        try{
-            const user = await User.findOne({email: email});
+            return res.status(400).send("missing email or password");
+        }
+        try {
+            const user = await User.findOne({ email: email });
             if (user == null) {
-                return  res.status(400).send("invalid emil or password");
+                return res.status(400).send("invalid email or password");
             }
-            const validePassword = await bcrypt.compare(password,user.password);
-            if(!validePassword){
+            const validPassword = await bcrypt.compare(password, user.password);
+            if (!validPassword) {
                 return res.status(400).send("invalid password");
             }
-            const token =  jwt.sign({
+            const token = jwt.sign({
                 _id: user._id
             }, process.env.TOKEN_SECRET, {
                 expiresIn: process.env.TOKEN_EXPIRATION
             });
-            console.log("REFRESH_TOKEN_SECRET");
-            const refreshtoken = jwt.sign({
+            const refreshToken = jwt.sign({
                 _id: user._id,
                 salt: Math.random()
-            },process.env.REFRESH_TOKEN_SECRET);
+            }, process.env.REFRESH_TOKEN_SECRET);
 
-            if(user.tokens == null){
-               user.tokens = [refreshtoken];
-            }else{
-                user.tokens.push(refreshtoken);
-            }await user.save();
-                
-            return res.status(200).send({
-                accessToken: token,
-                refreshToken: refreshtoken
-
-            });
-
-        }catch(error){
-            console.log(error);
-            return res.status(400).send(error.message);
-    
-        }
-    }
-
-   
-    async refresh (req: Request, res: Response){
-        console.log("refresh");
-        const userHeader = req.headers['authorization'];
-        const refreshToken = userHeader && userHeader.split(' ')[1];
-
-        if (refreshToken == null) {
-            return res.status(401).send("missing token");
-        }
-
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, userId:{_id: string} ) => {
-            if (err) {
-                return res.status(403).send("invalid token11111");
-            }   
-            try{
-            const user = await User.findById(userId._id);
-            console.log("userrrrrrrr:",user);
-            if ( user == null || user.tokens == null || !user.tokens.includes(refreshToken)){
-                if (user.tokens != null){
-                    user.tokens = [];
-                    await user.save();
-                }
-                return res.status(403).send("invalid token22222");
+            if (user.tokens == null) {
+                user.tokens = [refreshToken];
+            } else {
+                user.tokens.push(refreshToken);
             }
-            const token =  jwt.sign({
-                _id: user._id
-            }, process.env.TOKEN_SECRET, {
-                expiresIn: process.env.TOKEN_EXPIRATION
-            });
-            console.log("REFRESH_TOKEN_SECRET");
-            const newRefreshtoken = jwt.sign({
-                _id: user._id,
-                salt: Math.random()
-            },process.env.REFRESH_TOKEN_SECRET);
-
-            user.tokens = user.tokens.filter(token => token != refreshToken);
-            user.tokens.push(newRefreshtoken);
             await user.save();
-                
+
             return res.status(200).send({
                 accessToken: token,
-                refreshToken: newRefreshtoken
-
+                refreshToken: refreshToken
             });
-        }catch(error){
-            console.log(error);
+        } catch (error) {
             return res.status(400).send(error.message);
-
         }
-        });
-
     }
-    async logout(req: Request, res: Response) {
-        console.log("logout");
-    
+
+    async refresh(req: Request, res: Response) {
         const userHeader = req.headers['authorization'];
         const refreshToken = userHeader && userHeader.split(' ')[1];
-    
+
         if (refreshToken == null) {
             return res.status(401).send("missing token");
         }
-    
+
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, userId: { _id: string }) => {
             if (err) {
-                console.log(err);
+                return res.status(403).send("invalid token");
+            }
+            try {
+                const user = await User.findById(userId._id);
+                if (user == null || user.tokens == null || !user.tokens.includes(refreshToken)) {
+                    if (user.tokens != null) {
+                        user.tokens = [];
+                        await user.save();
+                    }
+                    return res.status(403).send("invalid token");
+                }
+                const token = jwt.sign({
+                    _id: user._id
+                }, process.env.TOKEN_SECRET, {
+                    expiresIn: process.env.TOKEN_EXPIRATION
+                });
+                const newRefreshToken = jwt.sign({
+                    _id: user._id,
+                    salt: Math.random()
+                }, process.env.REFRESH_TOKEN_SECRET);
+
+                user.tokens = user.tokens.filter(token => token != refreshToken);
+                user.tokens.push(newRefreshToken);
+                await user.save();
+
+                return res.status(200).send({
+                    accessToken: token,
+                    refreshToken: newRefreshToken
+                });
+            } catch (error) {
+                return res.status(400).send(error.message);
+            }
+        });
+    }
+
+    async logout(req: Request, res: Response) {
+        const userHeader = req.headers['authorization'];
+        const refreshToken = userHeader && userHeader.split(' ')[1];
+
+        if (refreshToken == null) {
+            return res.status(401).send("missing token");
+        }
+
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, userId: { _id: string }) => {
+            if (err) {
                 return res.status(403).send("Invalid token");
             }
-    
+
             try {
                 const user = await User.findById(userId._id);
                 if (!user) {
                     return res.status(404).send("User not found");
                 }
-    
+
                 if (!user.tokens || !user.tokens.includes(refreshToken)) {
                     return res.status(403).send("invalid token");
                 }
-    
+
                 user.tokens = user.tokens.filter(token => token != refreshToken);
                 await user.save();
-    
+
                 return res.status(200).send("logout successfully");
             } catch (error) {
-                console.log(error);
                 return res.status(500).send("Internal server error");
             }
         });
     }
 
+    async getCurrentUser(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization?.split(' ')[1];
+            if (!token) {
+                return res.status(401).json({ message: 'Missing token' });
+            }
+            const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+            if (typeof decodedToken !== 'object' || !decodedToken._id) {
+                return res.status(401).json({ message: 'Invalid token' });
+            }
+            const userId = decodedToken._id;
+            const user = await User.findById(userId).select('-password -tokens');
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            res.status(200).json(user);
+        } catch (error) {
+            console.error('Error getting current user:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
 }
 
 export default new UserController();

@@ -1,12 +1,40 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { postModel } from './model/post';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import userAPI from '../api/userAPI';
+import { User } from './model/user';
 
-const AddPostPage: FC<{navigation: any}> = ({navigation}) => {
+const AddPostPage: FC<{ navigation: any }> = ({ navigation }) => {
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = await AsyncStorage.getItem('accessToken');
+      if (token) {
+        try {
+          const userResponse = await userAPI.getCurrentUser(token);
+          if (userResponse.status === 200) {
+            setCurrentUser(userResponse.data as User);
+          } else {
+            Alert.alert('Error', 'Failed to fetch user data.');
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+          Alert.alert('Error', 'Failed to fetch user data.');
+        }
+      }
+    };
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    navigation.setOptions({
+      onPostAdded: handleAddPost,
+    });
+  }, [navigation, title, message, currentUser]);
 
   const handleAddPost = async () => {
     try {
@@ -16,16 +44,21 @@ const AddPostPage: FC<{navigation: any}> = ({navigation}) => {
         return;
       }
 
-      const response = await postModel.createPost({
-          title: title,
-          message: message,
-          sender: { } 
-          ,
-          id: undefined
-      }, token);
+      if (!currentUser) {
+        Alert.alert('Error', 'Failed to fetch user data.');
+        return;
+      }
+
+      const newPost = {
+        title,
+        message,
+        sender: currentUser._id,
+      };
+
+      const response = await postModel.createPost(newPost, token);
 
       Alert.alert('Success', 'Post added successfully.');
-      navigation.navigate('FeedPage');
+      navigation.navigate('FeedPage', { refresh: true });
     } catch (error: any) {
       console.error('Error adding post:', error);
       Alert.alert('Error', error.message || 'Failed to add post. Please try again.');

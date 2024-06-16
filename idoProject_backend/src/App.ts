@@ -1,4 +1,5 @@
 import express, {Express} from 'express';
+import path from 'path'; 
 const app = express();
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -25,6 +26,7 @@ const appInit = () =>{
     
     app.use('/user',user_route);
     app.use('/post',post_route);
+    app.use('/uploads', express.static(path.join(__dirname, './uploads')));
     
     app.get('/', (req, res) => {
         res.send('SERVER STARTED!');
@@ -34,8 +36,5 @@ const appInit = () =>{
    });
    return promise;
 };
-
-
-
 
 export default appInit;

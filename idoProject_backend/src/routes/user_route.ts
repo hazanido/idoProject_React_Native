@@ -1,9 +1,20 @@
 import express from 'express';
+import path from 'path'; 
 const router = express.Router();
 import UserController from '../controllers/user';
 import userMiddleware from '../common/user_middleware';
+import multer from 'multer';
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.join(__dirname, '../uploads'));
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
 
+const upload = multer({ storage: storage });
 /**
 * @swagger
 * tags:
@@ -302,6 +313,10 @@ router.post('/logout',UserController.logout.bind(UserController));
 *                           $ref: '#/components/schemas/Tokens'
 */
 router.get('/refresh', UserController.refresh.bind(UserController));
+
+router.put("/:id/profile-image", upload.single('image'), UserController.updateProfileImage.bind(UserController));
+
+router.get('/me', UserController.getCurrentUser.bind(UserController));
 
 
 export default router;

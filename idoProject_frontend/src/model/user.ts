@@ -1,6 +1,7 @@
 import userAPI from "../../api/userAPI";
 
 export type User = {
+    [x: string]: any;
     id: any
     name: string,
     password: string
@@ -10,7 +11,6 @@ export type User = {
 };
 
 export const userModel = {
-
   getAllUsers: async (): Promise<User[]> => {
     try {
       const response = await userAPI.getAllUser();
@@ -43,7 +43,6 @@ export const userModel = {
 
   loginUser: async (user: User): Promise<{ accessToken: string, refreshToken: string }> => {
     try {
-      console.log('Logging in with email:', user.email, 'and password', user.password);
       const response = await userAPI.loginUser(user);
       return response.data as { accessToken: string, refreshToken: string };
     } catch (error) {
@@ -60,5 +59,16 @@ export const userModel = {
       console.error('Error updating user:', error);
       throw error;
     }
+  },
+
+  updateProfileImage: async (userId: string, image: FormData): Promise<User> => {
+    try {
+      const response = await userAPI.updateProfileImage(userId, image);
+      return response.data as User;
+    } catch (error) {
+      console.error('Error updating profile image:', error);
+      throw error;
+    }
   }
 };
+

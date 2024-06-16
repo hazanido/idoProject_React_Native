@@ -46,7 +46,7 @@ import postController from '../controllers/post';
  *       sender:
  *         _id: '6662d0370781cf5fef32f831'
  *         name: 'ido'
- *         imgUrl: 'http://example.com/image.jpg'
+ *         imgUrl: '../uploads/default_image.jpg'
  */
 
 

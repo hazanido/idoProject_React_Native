@@ -12,16 +12,15 @@ export interface IUser {
 }
 
 const UserSchema = new mongoose.Schema<IUser>({
-    
     name: {
         type: String,
         required: true,
-      },
-    password:{
+    },
+    password: {
         type: String,
         required: true
     },
-    email:{ 
+    email: { 
         type: String,
         required: true,
         unique: true 
@@ -29,16 +28,16 @@ const UserSchema = new mongoose.Schema<IUser>({
     age: {
         type: Number,
         required: true,
-        },
+    },
     imgUrl: {
         type: String,
-        },    
+        default: '../uploads/default_image.jpg'
+    },
     tokens: {
         type: [String]
     }    
-    
-  
 });
+
 
 export default mongoose.model<IUser>("User", UserSchema);
 
