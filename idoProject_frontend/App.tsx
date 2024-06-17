@@ -5,14 +5,11 @@ import MainPageLogin from './src/mainPageLogin';
 import RegistrationPage from './src/RegistrationPage';
 import FeedPage from './src/FeedPage';
 import AddPostPage from './src/AddPostPage';
-<<<<<<< HEAD
-=======
 import ProfilePage from './src/ProfilePage';
 import MyPostsPage from './src/MyPostsPage';
 import EditPostPage from './src/EditPostPage';
 import EditProfilePage from './src/EditProfilePage';
 import EditImagePage from './src/EditImagePage';
->>>>>>> my-branc678
 
 const Stack = createStackNavigator();
 
@@ -40,8 +37,6 @@ const App: React.FC = () => {
           component={AddPostPage}
           options={{ title: 'Add Post' }}
         />
-<<<<<<< HEAD
-=======
         <Stack.Screen
           name="ProfilePage"
           component={ProfilePage}
@@ -68,7 +63,6 @@ const App: React.FC = () => {
           options={{ title: 'Edit Image' }}
         />
 
->>>>>>> my-branc678
       </Stack.Navigator>
     </NavigationContainer>
   );
