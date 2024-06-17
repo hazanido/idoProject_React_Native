@@ -34,8 +34,8 @@ const postAPI = {
     });
   },
 
-  deletePost: async (_id: string, token: string) => {
-    return backAPI.delete(`/post/${_id}`, {
+  deletePost: async (id: string, token: string) => {
+    return backAPI.delete(`/post/${id}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

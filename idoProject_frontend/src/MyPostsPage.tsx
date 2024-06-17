@@ -8,6 +8,15 @@ import { User, userModel } from './model/user';
 const MyPostsPage: FC<{ navigation: any }> = ({ navigation }) => {
   const [posts, setPosts] = useState<Post[]>([]);
 
+  const processPosts = (posts: any[]): Post[] => {
+    return posts.map(post => ({
+      id: post._id,
+      title: post.title,
+      message: post.message,
+      sender: post.sender,
+    }));
+  };
+
   useEffect(() => {
     const fetchMyPosts = async () => {
       try {
@@ -21,8 +30,9 @@ const MyPostsPage: FC<{ navigation: any }> = ({ navigation }) => {
         }
 
         const response = await userModel.getPostByUserId(token);
+        const processedPosts = processPosts(response);
         console.log('Fetched posts:', response);
-        setPosts(response);
+        setPosts(processedPosts);
       } catch (error: any) {
         console.error('Error fetching posts:', error);
         Alert.alert('Error', 'Failed to fetch posts. Please try again later.');
@@ -33,8 +43,45 @@ const MyPostsPage: FC<{ navigation: any }> = ({ navigation }) => {
     fetchMyPosts();
   }, []);
 
-  const handlePostPress = (post: { sender: { name: string; }; message: string; }) => {
-    Alert.alert('Post by ' + post.sender.name, 'Post content: ' + post.message);
+  const handleDeletePost = async (postId: string) => {
+    try {
+      const token = await AsyncStorage.getItem('refreshToken');
+      console.log('Deleting post with ID:', postId);
+      await postModel.deletePost(postId, token as string);
+      setPosts(posts.filter(post => post.id !== postId));
+      Alert.alert('Success', 'Post deleted successfully');
+    } catch (error: any) {
+      console.error('Error deleting post:', error);
+      Alert.alert('Error', 'Failed to delete post. Please try again later.');
+    }
+  };
+
+  const handleEditPost = (post: Post) => {
+    navigation.navigate('EditPostPage', { post });
+  };
+
+  const handlePostPress = (post: Post) => {
+    console.log('Post pressed:', post.id);
+    Alert.alert(
+      'Post Options',
+      'Choose an action',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: () => handleDeletePost(post.id),
+          style: 'destructive',
+        },
+        {
+          text: 'Edit',
+          onPress: () => handleEditPost(post),
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const renderPost = ({ item }: { item: Post }) => (
