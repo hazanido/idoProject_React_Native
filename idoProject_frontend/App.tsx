@@ -9,6 +9,7 @@ import ProfilePage from './src/ProfilePage';
 import MyPostsPage from './src/MyPostsPage';
 import EditPostPage from './src/EditPostPage';
 import EditProfilePage from './src/EditProfilePage';
+import EditImagePage from './src/EditImagePage';
 
 const Stack = createStackNavigator();
 
@@ -55,6 +56,11 @@ const App: React.FC = () => {
           name = "EditProfilePage"
           component={EditProfilePage}
           options={{ title: 'Edit Profile' }}
+        />
+        <Stack.Screen
+          name = "EditImagePage"
+          component={EditImagePage}
+          options={{ title: 'Edit Image' }}
         />
 
       </Stack.Navigator>

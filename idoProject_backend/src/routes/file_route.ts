@@ -2,9 +2,6 @@ import multer from 'multer';
 import express, { Request } from 'express';
 const router = express.Router();
 
-
-
-
 const base = "http://localhost:3000/";
 
 const storage = multer.diskStorage({
@@ -37,6 +34,3 @@ router.post('/upload', upload.single('file'), (req: Request & { file: Express.Mu
 });
 
 export default router;
-
-
-
