@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { back_URL } from '../config';
 import { User, userModel } from './model/user';
 
-const MyPostsPage: FC<{ navigation: any }> = ({ navigation }) => {
+const MyPostsPage: FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
   const [posts, setPosts] = useState<Post[]>([]);
 
   const processPosts = (posts: any[]): Post[] => {
@@ -42,6 +42,13 @@ const MyPostsPage: FC<{ navigation: any }> = ({ navigation }) => {
 
     fetchMyPosts();
   }, []);
+
+  useEffect(() => {
+    if (route.params?.updatedPost) {
+      const updatedPost = route.params.updatedPost;
+      setPosts(posts.map(post => post.id === updatedPost.id ? updatedPost : post));
+    }
+  }, [route.params?.updatedPost]);
 
   const handleDeletePost = async (postId: string) => {
     try {
