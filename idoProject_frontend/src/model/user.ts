@@ -1,8 +1,10 @@
+import postAPI from "../../api/postAPI";
 import userAPI from "../../api/userAPI";
+import { Post } from "./post";
 
 export type User = {
-    id: any
-    name: string,
+    _id: any
+    name: string
     password: string
     email: string
     age: Number
@@ -11,9 +13,9 @@ export type User = {
 
 export const userModel = {
 
-  getAllUsers: async (): Promise<User[]> => {
+  getAllUsers: async (token: string): Promise<User[]> => {
     try {
-      const response = await userAPI.getAllUser();
+      const response = await userAPI.getAllUser(token);
       return response.data as User[];
     } catch (error) {
       console.error('Error getting all users:', error);
@@ -25,6 +27,16 @@ export const userModel = {
     try {
       const response = await userAPI.getUser(id);
       return response.data as User;
+    } catch (error) {
+      console.error('Error getting user:', error);
+      throw error;
+    }
+  },
+  getUserByToken: async (token: string): Promise<User> => {
+    try {
+      console.log('Getting user by token:', token);
+      const response:any = await userAPI.getUserByToken(token);
+      return response.data;
     } catch (error) {
       console.error('Error getting user:', error);
       throw error;
@@ -52,13 +64,33 @@ export const userModel = {
     }
   },
 
-  updateUser: async (user: User): Promise<User> => {
+  updateUser: async (token: string,user: Partial<User>): Promise<User> => {
     try {
-      const response = await userAPI.updateUser(user);
+      console.log('Updating user:', user);
+      const response = await userAPI.updateUser(token,user);
       return response.data as User;
     } catch (error) {
       console.error('Error updating user:', error);
       throw error;
     }
-  }
+  },
+  getPostByUserId: async (token: string): Promise<Post[]> => {
+    try {
+      const response = await userAPI.getPostByUserId(token);
+      return response.data as Post[];
+    } catch (error) {
+      console.error('Error getting posts by user ID:', error);
+      throw error;
+    }
+  },
+  checkEmailExists: async (email: string,token: string): Promise<boolean> => {
+    try {
+      const users = await userModel.getAllUsers(token);
+      console.log('Checking if users:', users);
+      return users.some(user => user.email === email);
+    } catch (error) {
+      console.error('Error checking if email exists:', error);
+      throw error;
+    }
+  },
 };

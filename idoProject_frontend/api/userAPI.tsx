@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 // userAPI.ts
+=======
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+>>>>>>> my-branc678
 import { User } from "../src/model/user";
 import backAPI from "./backAPI";
 
 const userAPI = {
+<<<<<<< HEAD
   getAllUser: async () => {
     return backAPI.get('/user');
   },
@@ -18,6 +23,35 @@ const userAPI = {
   deleteUser: async (id: string) => {
     return backAPI.delete(`/user/${id}`);
   },
+=======
+    getAllUser: async (token: string) => {
+        return backAPI.get('/post', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+
+        
+    },
+
+    getUser: async (_id: string) => {
+        return backAPI.get(`/user/${_id}`)
+    },
+    getUserByToken: async (token: string) => {
+        return backAPI.get(`/user/${token}`)
+        
+    },
+    getPostByUserId: async ( token: string) => {
+        return backAPI.get(`/user/post/${token}` )
+    },
+    updateUser: async (token: string,user: Partial<User>) => {
+        return backAPI.put(`/user/put/${token}`, user)
+    },
+
+    deleteUser: async (_id: string) => {
+        return backAPI.delete(`/user/${_id}`)
+    },
+>>>>>>> my-branc678
 
   loginUser: async (user: User) => {
     console.log("try to login");
@@ -35,6 +69,7 @@ const userAPI = {
     });
   },
 
+<<<<<<< HEAD
   googleUser: async (user: User) => {
     return backAPI.post('/user/google', user);
   },
@@ -44,6 +79,12 @@ const userAPI = {
       headers: { Authorization: `Bearer ${token}` }
     });
   }
+=======
+    googleUser: async (user: User) => {
+        return backAPI.post('/user/google', user)
+    },
+    
+>>>>>>> my-branc678
 };
 
 export default userAPI;

@@ -1,5 +1,6 @@
 import BaseController from './base';
 import User,{IUser} from '../Model/userModel';
+import Post from '../Model/postModel';
 import { Request, Response } from 'express';
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken'
@@ -9,6 +10,45 @@ class UserController extends BaseController<IUser>{
     constructor() {
         super(User)
     }
+    async getUserByToken (req: Request, res: Response){
+        try {
+            console.log("getUserByToken");
+            console.log("Getting user by token:", req.params.tokens);
+            const token = req.params.tokens;
+            console.log("token:",token);
+            const user = await User.findOne({ tokens: token });
+            console.log("user:",user);  
+            if (!user) {
+              return res.status(404).send("token user not found");
+            } else {
+              return res.status(200).send(user);
+            }
+          } catch (error) {
+            console.log(error);
+            res.status(400).send(error.message);
+          }
+        }
+        async getPostByUserId (req: Request, res: Response){
+            console.log("getPostByUser");
+            try {
+                const token = req.params.tokens;
+                if (!token) {
+                    return res.status(400).send("Token is required");
+                }
+        
+                const user = await User.findOne({ tokens: token });
+                if (!user) {
+                    return res.status(404).send("Token user not found");
+                } else {
+                    const posts = await Post.find({ 'sender._id': user._id });
+                    console.log("posts:", posts);
+                    return res.status(200).json(posts);
+                }
+            } catch (error) {
+                console.error(error);
+                return res.status(500).send(error.message);
+            }
+        }
     async getUser (req: Request, res: Response){
         try {
             if (req.query.name) {
@@ -52,6 +92,7 @@ class UserController extends BaseController<IUser>{
                 password: hashedPassword,
                 email: req.body.email,
                 age: req.body.age,
+                imgUrl: 'idoProject_backend/imageUser/defultImag.jpg'
             
             });
             await newUser.save();
@@ -80,6 +121,7 @@ class UserController extends BaseController<IUser>{
             if(!validePassword){
                 return res.status(400).send("invalid password");
             }
+            
             const token =  jwt.sign({
                 _id: user._id
             }, process.env.TOKEN_SECRET, {
@@ -197,6 +239,38 @@ class UserController extends BaseController<IUser>{
                 return res.status(500).send("Internal server error");
             }
         });
+    }
+    async updateByToken(req: Request, res: Response) {
+        console.log("updateByToken");
+        const token = req.params.tokens;
+        console.log("token:",token);
+        if (!token) {
+
+            return res.status(400).send("Token is required");
+        }
+        try {
+
+            const user = await User.findOne({ tokens: token });
+            if (!user) {
+
+                return res.status(404).send("Token user not found");
+            }
+            console.log('testtttt:::', req.body);
+            const updates = Object.keys(req.body);
+            const allowedUpdates = ['name', 'password', 'email', 'age', 'imgUrl'];
+            const isValidOperation = updates.every(update => allowedUpdates.includes(update));
+            if (!isValidOperation) {
+                return res.status(400).send("Invalid updates");
+            }
+            updates.forEach(update => user[update] = req.body[update]);
+            
+
+            await user.save();
+            return res.status(200).send(user);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).send(error.message);
+        }
     }
 
 }

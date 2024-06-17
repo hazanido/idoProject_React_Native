@@ -1,11 +1,19 @@
 import React, { FC, useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Alert } from 'react-native';
+<<<<<<< HEAD
 import { useNavigation, useIsFocused } from '@react-navigation/native';
+=======
+>>>>>>> my-branc678
 import { Post, postModel } from './model/post';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import userAPI from '../api/userAPI';
+import { back_URL } from '../config';
 
+<<<<<<< HEAD
 const FeedPage: FC<{ navigation: any }> = ({ navigation }) => {
+=======
+const FeedPage: FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
+>>>>>>> my-branc678
   const [posts, setPosts] = useState<Post[]>([]);
   const isFocused = useIsFocused();
 
@@ -42,6 +50,12 @@ const FeedPage: FC<{ navigation: any }> = ({ navigation }) => {
     }
   }, [isFocused]);
 
+  useEffect(() => {
+    if (route.params?.newPost) {
+      setPosts([route.params.newPost, ...posts]);
+    }
+  }, [route.params?.newPost]);
+
   const handleLogout = async () => {
     try {
       const refreshToken = await AsyncStorage.getItem('refreshToken');
@@ -75,6 +89,7 @@ const FeedPage: FC<{ navigation: any }> = ({ navigation }) => {
     Alert.alert('Post by ' + post.sender.name, 'Post content: ' + post.message);
   };
 
+<<<<<<< HEAD
   const renderPost = ({ item }: { item: Post }) => {
     const imgUrl = item.sender?.imgUrl || 'default_image_url';
 
@@ -88,6 +103,17 @@ const FeedPage: FC<{ navigation: any }> = ({ navigation }) => {
       </TouchableOpacity>
     );
   };
+=======
+  const renderPost = ({ item }: { item: Post }) => (
+    <TouchableOpacity style={styles.postContainer} onPress={() => handlePostPress(item)}>
+      <Image source={{ uri: `${back_URL}${item.sender.imgUrl}` }} style={styles.postImage} />
+      <View style={styles.postContent}>
+        <Text style={styles.postTitle}>{item.title}</Text>
+        <Text style={styles.postMessage}>{item.message}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+>>>>>>> my-branc678
 
   return (
     <View style={styles.container}>

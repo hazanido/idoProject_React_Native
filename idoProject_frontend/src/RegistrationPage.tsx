@@ -12,12 +12,13 @@ const RegistrationPage: FC<{navigation: any}> = ({navigation}) => {
   const handleRegister = async () => {
     try {
       const response = await userModel.createUser({
+        _id: '',
         name: name,
         email: email,
         password: password,
         age: parseInt(age, 10),
         imgUrl: '',
-        id: undefined,
+        
       });
       Alert.alert('Success', 'Registration successful. Please log in.');
       navigation.navigate('MainPageLogin');
