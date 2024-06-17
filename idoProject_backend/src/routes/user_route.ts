@@ -307,4 +307,5 @@ router.get("/:tokens",UserController.getUserByToken.bind(UserController));
 
 router.get("/post/:tokens",UserController.getPostByUserId.bind(UserController))
 
+router.put("/put/:tokens",UserController.updateByToken.bind(UserController));
 export default router;

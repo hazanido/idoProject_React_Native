@@ -3,8 +3,14 @@ import { User } from "../src/model/user";
 import backAPI from "./backAPI";
 
 const userAPI = {
-    getAllUser: async () => {
-        return backAPI.get('/user')
+    getAllUser: async (token: string) => {
+        return backAPI.get('/post', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+
+        
     },
 
     getUser: async (_id: string) => {
@@ -17,8 +23,8 @@ const userAPI = {
     getPostByUserId: async ( token: string) => {
         return backAPI.get(`/user/post/${token}` )
     },
-    updateUser: async (user: User) => {
-        return backAPI.put(`/user/${user._id}`, user)
+    updateUser: async (token: string,user: Partial<User>) => {
+        return backAPI.put(`/user/put/${token}`, user)
     },
 
     deleteUser: async (_id: string) => {

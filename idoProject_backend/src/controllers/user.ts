@@ -238,6 +238,38 @@ class UserController extends BaseController<IUser>{
             }
         });
     }
+    async updateByToken(req: Request, res: Response) {
+        console.log("updateByToken");
+        const token = req.params.tokens;
+        console.log("token:",token);
+        if (!token) {
+
+            return res.status(400).send("Token is required");
+        }
+        try {
+
+            const user = await User.findOne({ tokens: token });
+            if (!user) {
+
+                return res.status(404).send("Token user not found");
+            }
+            console.log('testtttt:::', req.body);
+            const updates = Object.keys(req.body);
+            const allowedUpdates = ['name', 'password', 'email', 'age', 'imgUrl'];
+            const isValidOperation = updates.every(update => allowedUpdates.includes(update));
+            if (!isValidOperation) {
+                return res.status(400).send("Invalid updates");
+            }
+            updates.forEach(update => user[update] = req.body[update]);
+            
+
+            await user.save();
+            return res.status(200).send(user);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).send(error.message);
+        }
+    }
 
 }
 

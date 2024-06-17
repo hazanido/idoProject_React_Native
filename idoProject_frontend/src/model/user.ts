@@ -13,9 +13,9 @@ export type User = {
 
 export const userModel = {
 
-  getAllUsers: async (): Promise<User[]> => {
+  getAllUsers: async (token: string): Promise<User[]> => {
     try {
-      const response = await userAPI.getAllUser();
+      const response = await userAPI.getAllUser(token);
       return response.data as User[];
     } catch (error) {
       console.error('Error getting all users:', error);
@@ -64,9 +64,10 @@ export const userModel = {
     }
   },
 
-  updateUser: async (user: User): Promise<User> => {
+  updateUser: async (token: string,user: Partial<User>): Promise<User> => {
     try {
-      const response = await userAPI.updateUser(user);
+      console.log('Updating user:', user);
+      const response = await userAPI.updateUser(token,user);
       return response.data as User;
     } catch (error) {
       console.error('Error updating user:', error);
@@ -81,5 +82,15 @@ export const userModel = {
       console.error('Error getting posts by user ID:', error);
       throw error;
     }
-  }
+  },
+  checkEmailExists: async (email: string,token: string): Promise<boolean> => {
+    try {
+      const users = await userModel.getAllUsers(token);
+      console.log('Checking if users:', users);
+      return users.some(user => user.email === email);
+    } catch (error) {
+      console.error('Error checking if email exists:', error);
+      throw error;
+    }
+  },
 };

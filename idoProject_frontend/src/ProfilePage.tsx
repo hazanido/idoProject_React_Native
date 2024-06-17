@@ -7,30 +7,38 @@ import { back_URL } from '../config';
 const ProfilePage: FC<{ navigation: any }> = ({ navigation }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const token = await AsyncStorage.getItem('refreshToken');
-        if (!token) {
-          navigation.navigate('MainPageLogin');
-          return;
-        }
-
-        const userString = await userModel.getUserByToken(token);
-        if (!userString) {
-          throw new Error('User not found');
-        }
-
-        const fetchedUser: User = userString as User;
-        setUser(fetchedUser);
-      } catch (error: any) {
-        console.error('Error fetching user:', error);
-        Alert.alert('Error', 'Failed to fetch user. Please try again later.');
+  const fetchUser = async () => {
+    try {
+      const token = await AsyncStorage.getItem('refreshToken');
+      if (!token) {
+        navigation.navigate('MainPageLogin');
+        return;
       }
-    };
 
+      const userString = await userModel.getUserByToken(token);
+      if (!userString) {
+        throw new Error('User not found');
+      }
+
+      const fetchedUser: User = userString as User;
+      setUser(fetchedUser);
+    } catch (error: any) {
+      console.error('Error fetching user:', error);
+      Alert.alert('Error', 'Failed to fetch user. Please try again later.');
+    }
+  };
+
+  useEffect(() => {
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchUser();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   if (!user) {
     return (
