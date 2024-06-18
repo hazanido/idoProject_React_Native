@@ -24,11 +24,11 @@ const appInit = () =>{
         } catch (error) {
             console.log('Error connecting to DB: ' + error);
         }
+    app.use("/files",fileRoute);    
     app.use('/idoProject_backend/imageUser', express.static(path.join(__dirname, '../imageUser')));
     app.use('/user',user_route);
     app.use('/post',post_route);
-    app.use('/imageUser', express.static(path.join(__dirname, '../imageUser')));
-    app.use("/files",fileRoute);
+    
     
     app.get('/', (req, res) => {
         res.send('SERVER STARTED!');

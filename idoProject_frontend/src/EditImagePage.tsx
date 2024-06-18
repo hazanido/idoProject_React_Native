@@ -82,11 +82,11 @@ const EditImagePage: FC<{ navigation: any }> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Edit Profile Image</Text>
-      <TouchableOpacity style={styles.button} onPress={handleCameraLaunch}>
-        <Text style={styles.buttonText}>Take a Photo</Text>
+      <TouchableOpacity onPress={handleCameraLaunch}>
+        <Image source={require('../assets/camera.png')} style={styles.icon} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handleImageLibraryLaunch}>
-        <Text style={styles.buttonText}>Choose from Gallery</Text>
+      <TouchableOpacity onPress={handleImageLibraryLaunch}>
+        <Image source={require('../assets/gallery.png')} style={styles.icon} />
       </TouchableOpacity>
       {image && <Image source={{ uri: image }} style={styles.image} />}
     </View>
@@ -105,15 +105,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 16,
   },
-  button: {
-    backgroundColor: '#007BFF',
-    padding: 10,
-    borderRadius: 5,
+  icon: {
+    width: 50,
+    height: 50,
     marginBottom: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
   },
   image: {
     width: 200,

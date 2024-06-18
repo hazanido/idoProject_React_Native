@@ -8,17 +8,11 @@ const postAPI = {
     });
   },
 
-<<<<<<< HEAD
-  getPost: async (id: string, token: string) => {
-    return backAPI.get(`/post/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
-=======
   getPost: async (_id: string, token: string) => {
     return backAPI.get(`/post/${_id}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
->>>>>>> my-branc678
     });
   },
 

@@ -1,54 +1,36 @@
 import React, { FC, useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Alert } from 'react-native';
-<<<<<<< HEAD
-import { useNavigation, useIsFocused } from '@react-navigation/native';
-=======
->>>>>>> my-branc678
 import { Post, postModel } from './model/post';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import userAPI from '../api/userAPI';
 import { back_URL } from '../config';
 
-<<<<<<< HEAD
-const FeedPage: FC<{ navigation: any }> = ({ navigation }) => {
-=======
 const FeedPage: FC<{ navigation: any, route: any }> = ({ navigation, route }) => {
->>>>>>> my-branc678
   const [posts, setPosts] = useState<Post[]>([]);
-  const isFocused = useIsFocused();
-
-  const fetchPosts = async () => {
-    try {
-      const token = await AsyncStorage.getItem('accessToken');
-      console.log('Fetched token:', token);
-      if (!token) {
-        console.log('No token found, navigating to MainPageLogin');
-        navigation.navigate('MainPageLogin');
-        return;
-      }
-
-      const response = await postModel.getAllPosts(token);
-      console.log('Fetched posts:', response);
-      const validatedPosts = response.map(post => ({
-        ...post,
-        sender: {
-          ...post.sender,
-          imgUrl: post.sender?.imgUrl || 'default_image_url', // URL של תמונה ברירת מחדל במקרה שהתמונה חסרה
-        },
-      }));
-      setPosts(validatedPosts);
-    } catch (error: any) {
-      console.error('Error fetching posts:', error);
-      Alert.alert('Error', 'Failed to fetch posts. Please try again later.');
-      navigation.navigate('MainPageLogin');
-    }
-  };
 
   useEffect(() => {
-    if (isFocused) {
-      fetchPosts();
-    }
-  }, [isFocused]);
+    const fetchPosts = async () => {
+      try {
+        const token = await AsyncStorage.getItem('accessToken');
+        console.log('Fetched token:', token);
+        if (!token) {
+          console.log('No token found, navigating to MainPageLogin');
+          navigation.navigate('MainPageLogin');
+          return;
+        }
+        
+        const response = await postModel.getAllPosts(token);
+        console.log('Fetched posts:', response);
+        setPosts(response);
+      } catch (error: any) {
+        console.error('Error fetching posts:', error);
+        Alert.alert('Error', 'Failed to fetch posts. Please try again later.');
+        navigation.navigate('MainPageLogin'); 
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   useEffect(() => {
     if (route.params?.newPost) {
@@ -78,32 +60,13 @@ const FeedPage: FC<{ navigation: any, route: any }> = ({ navigation, route }) =>
   };
 
   const handleAddPost = () => {
-    navigation.navigate('AddPostPage', {
-      onPostAdded: (newPost: Post) => {
-        setPosts(prevPosts => [newPost, ...prevPosts]);
-      }
-    });
+    navigation.navigate('AddPostPage');
   };
 
   const handlePostPress = (post: { sender: { name: string; }; message: string; }) => {
     Alert.alert('Post by ' + post.sender.name, 'Post content: ' + post.message);
   };
 
-<<<<<<< HEAD
-  const renderPost = ({ item }: { item: Post }) => {
-    const imgUrl = item.sender?.imgUrl || 'default_image_url';
-
-    return (
-      <TouchableOpacity style={styles.postContainer} onPress={() => handlePostPress(item)}>
-        <Image source={{ uri: imgUrl }} style={styles.postImage} />
-        <View style={styles.postContent}>
-          <Text style={styles.postTitle}>{item.title}</Text>
-          <Text style={styles.postMessage}>{item.message}</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-=======
   const renderPost = ({ item }: { item: Post }) => (
     <TouchableOpacity style={styles.postContainer} onPress={() => handlePostPress(item)}>
       <Image source={{ uri: `${back_URL}${item.sender.imgUrl}` }} style={styles.postImage} />
@@ -113,7 +76,6 @@ const FeedPage: FC<{ navigation: any, route: any }> = ({ navigation, route }) =>
       </View>
     </TouchableOpacity>
   );
->>>>>>> my-branc678
 
   return (
     <View style={styles.container}>
