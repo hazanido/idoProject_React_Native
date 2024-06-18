@@ -308,4 +308,26 @@ router.get("/:tokens",UserController.getUserByToken.bind(UserController));
 router.get("/post/:tokens",UserController.getPostByUserId.bind(UserController))
 
 router.put("/put/:tokens",UserController.updateByToken.bind(UserController));
+
+/**
+* @swagger
+* /user/google:
+*   post:
+*     summary: Login/Register a user using Google
+*     tags: [User]
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             $ref: '#/components/schemas/User'
+*     responses:
+*       200:
+*         description: The access & refresh tokens
+*         content:
+*           application/json:
+*             schema:
+*               $ref: '#/components/schemas/Tokens'
+*/
+router.post('/google', UserController.google.bind(UserController));
 export default router;
