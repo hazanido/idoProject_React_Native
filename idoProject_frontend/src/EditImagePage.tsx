@@ -47,7 +47,11 @@ const EditImagePage: FC<{ navigation: any }> = ({ navigation }) => {
 
   const handleCameraLaunch = () => {
     launchCamera({ mediaType: 'photo' }, response => {
-      if (response.assets && response.assets.length > 0) {
+      if (response.didCancel) {
+        Alert.alert('User cancelled image picker');
+      } else if (response.errorCode) {
+        Alert.alert('ImagePicker Error: ', response.errorMessage);
+      } else if (response.assets && response.assets.length > 0) {
         const asset = response.assets[0];
         const uri = asset.uri ?? '';
         if (uri) {
@@ -64,7 +68,11 @@ const EditImagePage: FC<{ navigation: any }> = ({ navigation }) => {
   
   const handleImageLibraryLaunch = () => {
     launchImageLibrary({ mediaType: 'photo' }, response => {
-      if (response.assets && response.assets.length > 0) {
+      if (response.didCancel) {
+        Alert.alert('User cancelled image picker');
+      } else if (response.errorCode) {
+        Alert.alert('ImagePicker Error: ', response.errorMessage);
+      } else if (response.assets && response.assets.length > 0) {
         const asset = response.assets[0];
         const uri = asset.uri ?? '';
         if (uri) {
