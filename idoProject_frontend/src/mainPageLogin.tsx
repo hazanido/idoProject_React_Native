@@ -1,21 +1,35 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import { userModel } from './model/user';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
+
+WebBrowser.maybeCompleteAuthSession();
 
 const MainPageLogin: FC<{navigation: any}> = ({navigation}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: '579314929961-qt3s0oeiatdck9be8lca75tiam7emoda.apps.googleusercontent.com',
+  });
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const { authentication } = response;
+      handleGoogleLogin(authentication?.accessToken);
+    }
+  }, [response]);
 
   const handleLogin = async () => {
     try {
       console.log('Logging in with email:', email, 'and password:', password);
       const response = await userModel.loginUser({
         _id: '',
-        name: '', 
-        age: 0, 
-        imgUrl: '', 
+        name: '',
+        age: 0,
+        imgUrl: '',
         email,
         password,
       });
@@ -36,7 +50,7 @@ const MainPageLogin: FC<{navigation: any}> = ({navigation}) => {
         console.error('No token found in response');
         Alert.alert('Error', 'Login failed. Please check your email and password.');
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error logging in:', error);
       Alert.alert('Error', 'Login failed. Please check your email and password.');
     }
@@ -46,8 +60,39 @@ const MainPageLogin: FC<{navigation: any}> = ({navigation}) => {
     navigation.navigate('RegistrationPage');
   };
 
-  const handleGoogleLogin = () => {
-    // Add Google login logic here
+  const handleGoogleLogin = async (token: string | undefined) => {
+    try {
+      const userInfoResponse = await fetch('https://www.googleapis.com/userinfo/v2/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const userInfo = await userInfoResponse.json();
+      console.log('Google user info:', userInfo);
+
+      const response = await userModel.googleUser({
+        _id: '',
+        name: userInfo.name ?? '',
+        email: userInfo.email ?? '',
+        password: '',
+        age: 0,
+        imgUrl: userInfo.picture ?? '',
+      });
+
+      const { accessToken, refreshToken } = response;
+      if (accessToken && refreshToken) {
+        await AsyncStorage.setItem('accessToken', accessToken);
+        await AsyncStorage.setItem('refreshToken', refreshToken);
+        console.log('Logged in successfully with Google');
+
+        navigation.navigate('FeedPage');
+      } else {
+        console.error('No token found in response');
+        Alert.alert('Error', 'Login with Google failed. Please try again.');
+      }
+    } catch (error: unknown) {
+      console.error('Google login error:', error);
+      Alert.alert('Error', 'Login with Google failed. Please try again.');
+    }
   };
 
   return (
@@ -75,7 +120,7 @@ const MainPageLogin: FC<{navigation: any}> = ({navigation}) => {
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Image source={require('../assets/signUp11.png')} style={styles.buttonImage} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handleGoogleLogin}>
+      <TouchableOpacity style={styles.button} onPress={() => promptAsync()}>
         <Image source={require('../assets/google.png')} style={styles.buttonImage} />
       </TouchableOpacity>
     </View>

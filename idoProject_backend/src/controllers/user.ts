@@ -272,6 +272,23 @@ class UserController extends BaseController<IUser>{
             return res.status(500).send(error.message);
         }
     }
+    async google(req: Request, res: Response) {
+        try {
+          const { email, name, imgUrl } = req.body;
+          let user = await User.findOne({ email });
+          if (!user) {
+            user = new User({ email, name, imgUrl, password: '' });
+            await user.save();
+          }
+          
+          const accessToken = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
+          const refreshToken = jwt.sign({ _id: user._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+          
+          res.status(200).send({ accessToken, refreshToken });
+        } catch (error) {
+          res.status(500).send({ message: 'Internal server error' });
+        }
+      }
 
 }
 

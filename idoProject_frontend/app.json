@@ -15,6 +15,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.yourcompany.idoproject",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -22,6 +23,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2a2f4bb3-5781-4fe8-9c15-e6d42e616e5d"
+      }
     }
   }
 }

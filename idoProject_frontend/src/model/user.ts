@@ -93,4 +93,13 @@ export const userModel = {
       throw error;
     }
   },
+  googleUser: async (user: User): Promise<{ accessToken: string, refreshToken: string }> => {
+    try {
+      const response = await userAPI.googleUser(user);
+      return response.data as { accessToken: string, refreshToken: string };
+    } catch (error) {
+      console.error('Error logging in user with Google:', error);
+      throw error;
+    }
+  },
 };
