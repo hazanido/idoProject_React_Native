@@ -1,12 +1,28 @@
-import React, { FC, useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
+import React, { FC, useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, Image, StyleSheet, Alert, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { userModel } from './model/user';
+import * as ImagePicker from "expo-image-picker";import { userModel } from './model/user';
 import { back_URL } from '../config';
+import { requestCameraPermissionsAsync, requestMediaLibraryPermissionsAsync } from 'expo-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 const EditImagePage: FC<{ navigation: any }> = ({ navigation }) => {
   const [image, setImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    requestPermissions();
+  }, []);
+
+  const requestPermissions = async () => {
+    if (Platform.OS === 'android') {
+      const cameraPermission = await requestCameraPermissionsAsync();
+      const libraryPermission = await requestMediaLibraryPermissionsAsync();
+
+      if (!cameraPermission.granted || !libraryPermission.granted) {
+        Alert.alert('You need to enable permissions to access the camera and library.');
+      }
+    }
+  };
 
   const uploadImage = async (uri: string) => {
     try {
@@ -45,7 +61,13 @@ const EditImagePage: FC<{ navigation: any }> = ({ navigation }) => {
     }
   };
 
-  const handleCameraLaunch = () => {
+  const handleCameraLaunch = async () => {
+    const { granted } = await requestCameraPermissionsAsync();
+    if (!granted) {
+      Alert.alert('You need to enable permission to access the camera.');
+      return;
+    }
+
     launchCamera({ mediaType: 'photo' }, response => {
       if (response.didCancel) {
         Alert.alert('User cancelled image picker');
@@ -65,8 +87,14 @@ const EditImagePage: FC<{ navigation: any }> = ({ navigation }) => {
       }
     });
   };
-  
-  const handleImageLibraryLaunch = () => {
+
+  const handleImageLibraryLaunch = async () => {
+    const { granted } = await requestMediaLibraryPermissionsAsync();
+    if (!granted) {
+      Alert.alert('You need to enable permission to access the library.');
+      return;
+    }
+
     launchImageLibrary({ mediaType: 'photo' }, response => {
       if (response.didCancel) {
         Alert.alert('User cancelled image picker');
